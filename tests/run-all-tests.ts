@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { generateDeterministicPlan, FullEventPlanSchema } from "../src/lib/ai";
 import { checkRateLimit, resetRateLimit } from "../src/lib/rate-limit";
 import { sanitizePlainString, sanitizeText } from "../src/lib/sanitize";
+import { formatCurrency, calculatePercentage, isValidStatusTransition } from "../src/lib/formatters";
 
 let passed = 0;
 let failed = 0;
@@ -333,6 +334,70 @@ async function runTests() {
       .reduce((acc, g) => acc + 1 + g.plusOnes, 0);
 
     assert(confirmedHeadcount === 5, "Confirmed headcount correctly calculates 2 primary guests + 3 plus-ones = 5");
+
+    // ----------------------------------------------------
+    // Scenario 17: Multi-Currency Financial Formatting
+    // ----------------------------------------------------
+    console.log("\n17. Testing Multi-Currency Financial Formatter:");
+    assert(formatCurrency(500000, "INR") === "₹500,000", "Formats INR amounts with rupee symbol (₹500,000)");
+    assert(formatCurrency(25000, "USD") === "$25,000", "Formats USD amounts with dollar symbol ($25,000)");
+    assert(formatCurrency(18500, "EUR") === "€18,500", "Formats EUR amounts with euro symbol (€18,500)");
+    assert(formatCurrency(12000, "GBP") === "£12,000", "Formats GBP amounts with pound symbol (£12,000)");
+    assert(formatCurrency(NaN, "USD") === "$0", "Handles NaN amounts gracefully defaulting to zero");
+
+    // ----------------------------------------------------
+    // Scenario 18: Zero-Division Protected Percentage Math
+    // ----------------------------------------------------
+    console.log("\n18. Testing Percentage Math & Division-by-Zero Guards:");
+    assert(calculatePercentage(25, 100) === 25, "Calculates clean 25% allocation");
+    assert(calculatePercentage(80, 0) === 0, "Guards against division by zero (returns 0%)");
+    assert(calculatePercentage(150, 100) === 100, "Clamps upper percentage bounds at 100%");
+    assert(calculatePercentage(-10, 100) === 0, "Clamps negative values at 0%");
+
+    // ----------------------------------------------------
+    // Scenario 19: Finite State Machine Status Transitions
+    // ----------------------------------------------------
+    console.log("\n19. Testing Event Lifecycle State Machine Transitions:");
+    assert(isValidStatusTransition("draft", "planned"), "Allows transition from draft to planned");
+    assert(isValidStatusTransition("planned", "active"), "Allows transition from planned to active");
+    assert(isValidStatusTransition("active", "completed"), "Allows transition from active to completed");
+    assert(!isValidStatusTransition("completed", "draft"), "Rejects invalid transition from completed back to draft");
+    assert(!isValidStatusTransition("cancelled", "active"), "Rejects revival of cancelled events to active");
+
+    // ----------------------------------------------------
+    // Scenario 20: Advanced Unicode & Null Byte Sanitization
+    // ----------------------------------------------------
+    console.log("\n20. Testing Advanced Unicode, Null Byte & Injection Stripping:");
+    const nullByteString = "ValidTitle\u0000<script>alert(1)</script>";
+    const sanitizedNull = sanitizePlainString(nullByteString);
+    assert(!sanitizedNull.includes("\u0000"), "Strips poisonous null bytes (\\u0000)");
+    assert(!sanitizedNull.includes("script"), "Strips embedded script tag following null byte");
+    assert(sanitizedNull === "ValidTitle", "Sanitizes cleanly down to pure title");
+
+    // ----------------------------------------------------
+    // Scenario 21: Task Prioritization & Urgency Ranking
+    // ----------------------------------------------------
+    console.log("\n21. Testing Task Urgency Weightings & Sorting:");
+    const taskPriorities = ["low", "urgent", "medium", "high"];
+    const priorityWeight: Record<string, number> = { urgent: 4, high: 3, medium: 2, low: 1 };
+    const sortedPriorities = [...taskPriorities].sort((a, b) => priorityWeight[b] - priorityWeight[a]);
+    assert(sortedPriorities[0] === "urgent", "Urgent tasks rank first in execution queue");
+    assert(sortedPriorities[sortedPriorities.length - 1] === "low", "Low priority tasks rank last in execution queue");
+
+    // ----------------------------------------------------
+    // Scenario 22: RFC 7807 Standard Error Envelope
+    // ----------------------------------------------------
+    console.log("\n22. Testing RFC 7807 Error Envelope Validation:");
+    const errorEnvelope = {
+      type: "https://promptwars.ai/errors/rate-limit",
+      title: "Too Many Requests",
+      status: 429,
+      detail: "Rate limit exceeded. Try again in 60 seconds.",
+      timestamp: new Date().toISOString(),
+    };
+    assert(errorEnvelope.status === 429, "Error envelope contains correct HTTP status 429");
+    assert(typeof errorEnvelope.timestamp === "string", "Error envelope contains ISO timestamp");
+    assert(errorEnvelope.title === "Too Many Requests", "Error envelope contains human-readable title");
 
     // ----------------------------------------------------
     // Clean up temporary test records

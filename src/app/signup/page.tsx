@@ -42,8 +42,9 @@ export default function SignUpPage() {
       }
 
       router.push("/onboarding");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to create account";
+      setError(msg);
     } finally {
       setLoading(false);
     }

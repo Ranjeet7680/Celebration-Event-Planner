@@ -116,8 +116,9 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
 
       setAddModalOpen(false);
       fetchBudgetAndExpenses();
-    } catch (err: any) {
-      setFormError(err.message);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to add expense";
+      setFormError(msg);
     } finally {
       setSubmitting(false);
     }
@@ -262,7 +263,7 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
                     color: "#F8FAFC",
                     fontSize: "12px",
                   }}
-                  formatter={(value: any) => [`${currency} ${Number(value).toLocaleString()}`, "Spent"]}
+                  formatter={(value: unknown) => [`${currency} ${Number(value).toLocaleString()}`, "Spent"]}
                 />
                 <Bar dataKey="spent" radius={[6, 6, 0, 0]}>
                   {chartData.map((_, index) => (

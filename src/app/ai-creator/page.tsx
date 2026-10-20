@@ -89,8 +89,9 @@ export default function AICreatorPage() {
       }
 
       setResult(data);
-    } catch (err: any) {
-      setError(err.message || "An error occurred while generating the plan");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "An error occurred while generating the plan";
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -120,8 +121,9 @@ export default function AICreatorPage() {
       await refreshEvents();
       setActiveEventId(data.eventId);
       router.push(`/events/${data.eventId}`);
-    } catch (err: any) {
-      setError(err.message || "Failed to convert plan into database event");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to convert plan into database event";
+      setError(msg);
     } finally {
       setSaving(false);
     }
@@ -284,18 +286,20 @@ export default function AICreatorPage() {
 
             {/* Plan Preview Tabs */}
             <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-800">
-              {[
-                { id: "overview", label: "Executive Overview" },
-                { id: "budget", label: "Budget Breakdown" },
-                { id: "timeline", label: "Preparation Timeline" },
-                { id: "schedule", label: "Day-of Schedule" },
-                { id: "tasks", label: "Task Checklist" },
-                { id: "team", label: "Team & Vendors" },
-                { id: "risks", label: "Risk Mitigation" },
-              ].map((tab) => (
+              {(
+                [
+                  { id: "overview", label: "Executive Overview" },
+                  { id: "budget", label: "Budget Breakdown" },
+                  { id: "timeline", label: "Preparation Timeline" },
+                  { id: "schedule", label: "Day-of Schedule" },
+                  { id: "tasks", label: "Task Checklist" },
+                  { id: "team", label: "Team & Vendors" },
+                  { id: "risks", label: "Risk Mitigation" },
+                ] as const
+              ).map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
+                  onClick={() => setActiveTab(tab.id)}
                   className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                     activeTab === tab.id
                       ? "bg-violet-600 text-white shadow-md shadow-violet-600/30"

@@ -16,17 +16,20 @@ import {
 import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card, Modal } from "@/components/ui";
 import { useEvent } from "@/context/EventContext";
+import { useDebounce } from "@/hooks/useDebounce";
+import type { EventTemplateEntity } from "@/types";
 
 export default function TemplatesPage() {
   const router = useRouter();
   const { refreshEvents, setActiveEventId } = useEvent();
-  const [templates, setTemplates] = useState<any[]>([]);
+  const [templates, setTemplates] = useState<EventTemplateEntity[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 300);
   const [loading, setLoading] = useState(true);
 
   // Modal state
-  const [selectedTemplate, setSelectedTemplate] = useState<any | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<EventTemplateEntity | null>(null);
   const [customTitle, setCustomTitle] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [creating, setCreating] = useState(false);
@@ -35,7 +38,7 @@ export default function TemplatesPage() {
     try {
       const params = new URLSearchParams();
       if (selectedCategory !== "all") params.append("category", selectedCategory);
-      if (search) params.append("search", search);
+      if (debouncedSearch) params.append("search", debouncedSearch);
 
       const res = await fetch(`/api/templates?${params.toString()}`);
       if (res.ok) {
@@ -51,9 +54,9 @@ export default function TemplatesPage() {
 
   useEffect(() => {
     fetchTemplates();
-  }, [selectedCategory, search]);
+  }, [selectedCategory, debouncedSearch]);
 
-  const handleUseTemplate = (tpl: any) => {
+  const handleUseTemplate = (tpl: EventTemplateEntity) => {
     setSelectedTemplate(tpl);
     setCustomTitle(tpl.title);
     const defaultDate = new Date();

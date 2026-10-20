@@ -21,11 +21,18 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card, Modal } from "@/components/ui";
+import type {
+  EventDetailEntity,
+  TaskEntity,
+  ExpenseEntity,
+  GuestEntity,
+  EventCollaboratorEntity,
+} from "@/types";
 
 export function EventOverviewClient({ eventId }: { eventId: string }) {
   const router = useRouter();
 
-  const [event, setEvent] = useState<any>(null);
+  const [event, setEvent] = useState<EventDetailEntity | null>(null);
   const [loading, setLoading] = useState(true);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editTitle, setEditTitle] = useState("");
@@ -111,17 +118,17 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
 
   // Calculations
   const totalTasks = event.tasks?.length || 0;
-  const completedTasks = event.tasks?.filter((t: any) => t.status === "completed").length || 0;
+  const completedTasks = event.tasks?.filter((t: TaskEntity) => t.status === "completed").length || 0;
   const taskPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
   const totalSpent = event.expenses
-    ?.filter((exp: any) => exp.status === "paid")
-    .reduce((sum: number, exp: any) => sum + exp.amount, 0) || 0;
+    ?.filter((exp: ExpenseEntity) => exp.status === "paid")
+    .reduce((sum: number, exp: ExpenseEntity) => sum + exp.amount, 0) || 0;
   const budgetUtilization = event.budget > 0 ? Math.round((totalSpent / event.budget) * 100) : 0;
 
   const attendingGuests = event.guests
-    ?.filter((g: any) => g.rsvpStatus === "attending")
-    .reduce((sum: number, g: any) => sum + 1 + (g.plusOne || 0), 0) || 0;
+    ?.filter((g: GuestEntity) => g.rsvpStatus === "attending")
+    .reduce((sum: number, g: GuestEntity) => sum + 1 + (g.plusOne || 0), 0) || 0;
 
   const eventDateObj = new Date(event.eventDate);
   const daysRemaining = Math.ceil((eventDateObj.getTime() - Date.now()) / (1000 * 3600 * 24));
@@ -333,7 +340,7 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
               </div>
 
               <div className="space-y-2">
-                {event.tasks?.slice(0, 5).map((task: any) => (
+                {event.tasks?.slice(0, 5).map((task: TaskEntity) => (
                   <div
                     key={task.id}
                     className="p-3 rounded-xl bg-slate-800/40 border border-slate-800 flex items-center justify-between"
@@ -363,7 +370,7 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
             <div>
               <h3 className="text-sm font-bold text-white mb-3">Event Collaborators</h3>
               <div className="space-y-3">
-                {event.collaborators?.map((c: any) => (
+                {event.collaborators?.map((c: EventCollaboratorEntity) => (
                   <div key={c.id} className="flex items-center justify-between text-xs">
                     <div>
                       <p className="font-semibold text-slate-200">{c.name}</p>
@@ -378,7 +385,7 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
             <div className="pt-4 border-t border-slate-800">
               <h3 className="text-sm font-bold text-white mb-3">Recent Expenses</h3>
               <div className="space-y-2">
-                {event.expenses?.slice(0, 4).map((exp: any) => (
+                {event.expenses?.slice(0, 4).map((exp: ExpenseEntity) => (
                   <div
                     key={exp.id}
                     className="p-2.5 rounded-xl bg-[#0B1020] border border-slate-800 flex items-center justify-between text-xs"

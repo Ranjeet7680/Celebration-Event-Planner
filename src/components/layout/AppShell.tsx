@@ -115,9 +115,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-[#0B1020] text-slate-100 flex flex-col md:flex-row">
+      {/* Skip to Main Content Link for Keyboard and Screen Reader Accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-violet-600 focus:text-white focus:font-semibold focus:rounded-xl focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-violet-400"
+      >
+        Skip to main content
+      </a>
+
       {/* Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-[#11182B] border-b border-slate-800 sticky top-0 z-40">
-        <Link href="/dashboard" className="flex items-center gap-2">
+        <Link href="/dashboard" className="flex items-center gap-2" aria-label="PromptWars Dashboard">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-violet-600/30">
             <Sparkles className="w-4 h-4 text-amber-300" />
           </div>
@@ -126,21 +134,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSearchModalOpen(true)}
+            aria-label="Open search modal"
             className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800"
           >
             <Search className="w-5 h-5" />
           </button>
           <Link
             href="/notifications"
+            aria-label={`View notifications (${unreadNotifications} unread)`}
             className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 relative"
           >
             <Bell className="w-5 h-5" />
             {unreadNotifications > 0 && (
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-violet-500 ring-2 ring-[#11182B]" />
+              <span
+                role="status"
+                aria-live="polite"
+                className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-violet-500 ring-2 ring-[#11182B]"
+              />
             )}
           </Link>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -150,13 +165,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Sidebar Desktop */}
       <aside
+        aria-label="Main Navigation"
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#11182B] border-r border-slate-800/80 flex flex-col transition-transform duration-200 ease-in-out md:translate-x-0 md:static ${
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Brand */}
         <div className="p-5 border-b border-slate-800/80 flex items-center justify-between">
-          <Link href="/dashboard" className="flex items-center gap-2.5 group">
+          <Link href="/dashboard" className="flex items-center gap-2.5 group" aria-label="PromptWars home">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 via-indigo-600 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-violet-600/30 group-hover:scale-105 transition-transform">
               <Sparkles className="w-5 h-5 text-amber-200" />
             </div>
@@ -172,6 +188,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </Link>
           <button
             onClick={() => setMobileMenuOpen(false)}
+            aria-label="Close sidebar navigation"
             className="md:hidden text-slate-400 hover:text-white"
           >
             <X className="w-5 h-5" />
@@ -277,6 +294,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             {/* Global Search Button */}
             <button
               onClick={() => setSearchModalOpen(true)}
+              aria-label="Search events, guests, tasks, and venues (Press Ctrl+K)"
               className="flex items-center gap-2.5 px-3.5 py-2 bg-[#171F35]/80 hover:bg-[#1E2945] border border-slate-700/60 rounded-xl text-xs text-slate-400 hover:text-slate-200 transition-colors w-full max-w-md cursor-pointer"
             >
               <Search className="w-4 h-4 text-slate-400" />
@@ -299,18 +317,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             {/* Notification Bell */}
             <Link
               href="/notifications"
+              aria-label={`View notifications (${unreadNotifications} unread)`}
               className="p-2 text-slate-300 hover:text-white rounded-xl hover:bg-slate-800 transition-colors relative"
               title="Notifications"
             >
               <Bell className="w-4 h-4" />
               {unreadNotifications > 0 && (
-                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-violet-500 ring-2 ring-[#11182B]" />
+                <span
+                  role="status"
+                  aria-live="polite"
+                  className="absolute top-1 right-1 w-2 h-2 rounded-full bg-violet-500 ring-2 ring-[#11182B]"
+                />
               )}
             </Link>
 
             {/* Settings Quick Link */}
             <Link
               href="/settings"
+              aria-label="Profile and Settings"
               className="p-2 text-slate-300 hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
               title="Profile & Settings"
             >
@@ -320,7 +344,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Page Main Content */}
-        <main className="flex-1 p-4 md:p-8 overflow-y-auto">{children}</main>
+        <main id="main-content" tabIndex={-1} className="flex-1 p-4 md:p-8 overflow-y-auto outline-none">
+          {children}
+        </main>
       </div>
 
       {/* Global Search Modal */}
@@ -339,6 +365,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               />
               <button
                 onClick={() => setSearchModalOpen(false)}
+                aria-label="Close search dialog"
                 className="text-slate-400 hover:text-white text-xs px-2 py-1 rounded bg-slate-800"
               >
                 ESC

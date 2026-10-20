@@ -28,10 +28,48 @@ import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card } from "@/components/ui";
 import { useEvent } from "@/context/EventContext";
 
+interface SpendingEntry {
+  category: string;
+  amount: number;
+}
+
+interface RsvpEntry {
+  name: string;
+  count: number;
+  fill: string;
+}
+
+interface TaskEntry {
+  name: string;
+  count: number;
+  fill: string;
+}
+
+interface AnalyticsPayload {
+  summary: {
+    totalEvents: number;
+    totalBudget: number;
+    totalSpent: number;
+    remainingBudget: number;
+    budgetUtilization: number;
+    totalGuests: number;
+    attendingGuests: number;
+    rsvpRate: number;
+    totalTasks: number;
+    completedTasks: number;
+    taskCompletionRate: number;
+  };
+  charts: {
+    spendingByCategory: SpendingEntry[];
+    rsvpBreakdown: RsvpEntry[];
+    taskBreakdown: TaskEntry[];
+  };
+}
+
 export default function AnalyticsPage() {
   const { events, activeEvent } = useEvent();
   const [selectedEventId, setSelectedEventId] = useState<string>("all");
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<AnalyticsPayload | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchAnalytics = async () => {
@@ -73,11 +111,25 @@ export default function AnalyticsPage() {
     downloadAnchor.remove();
   };
 
-  const summary = data?.summary || {};
-  const charts = data?.charts || {};
-  const spendingData = charts.spendingByCategory || [];
-  const rsvpData = charts.rsvpBreakdown || [];
-  const taskData = charts.taskBreakdown || [];
+  const defaultSummary: AnalyticsPayload["summary"] = {
+    totalEvents: 0,
+    totalBudget: 0,
+    totalSpent: 0,
+    remainingBudget: 0,
+    budgetUtilization: 0,
+    totalGuests: 0,
+    attendingGuests: 0,
+    rsvpRate: 0,
+    totalTasks: 0,
+    completedTasks: 0,
+    taskCompletionRate: 0,
+  };
+
+  const summary = data?.summary || defaultSummary;
+  const charts = data?.charts || { spendingByCategory: [], rsvpBreakdown: [], taskBreakdown: [] };
+  const spendingData = charts.spendingByCategory;
+  const rsvpData = charts.rsvpBreakdown;
+  const taskData = charts.taskBreakdown;
 
   const CATEGORY_COLORS = ["#8B5CF6", "#6366F1", "#F5C76B", "#EC4899", "#10B981", "#3B82F6"];
 
@@ -186,10 +238,10 @@ export default function AnalyticsPage() {
                         color: "#F8FAFC",
                         fontSize: "12px",
                       }}
-                      formatter={(val: any) => [`$${Number(val).toLocaleString()}`, "Spent"]}
+                      formatter={(val: unknown) => [`$${Number(val).toLocaleString()}`, "Spent"]}
                     />
                     <Bar dataKey="amount" radius={[6, 6, 0, 0]}>
-                      {spendingData.map((_: any, i: number) => (
+                      {spendingData.map((_entry: SpendingEntry, i: number) => (
                         <Cell key={`bar-${i}`} fill={CATEGORY_COLORS[i % CATEGORY_COLORS.length]} />
                       ))}
                     </Bar>
@@ -226,9 +278,9 @@ export default function AnalyticsPage() {
                       outerRadius={80}
                       innerRadius={45}
                       paddingAngle={4}
-                      label={({ name, percent }: any) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
+                      label={({ name, percent }: { name?: string; percent?: number }) => `${name || ""} ${((percent || 0) * 100).toFixed(0)}%`}
                     >
-                      {rsvpData.map((entry: any, index: number) => (
+                      {rsvpData.map((entry: RsvpEntry, index: number) => (
                         <Cell key={`cell-${index}`} fill={entry.fill} />
                       ))}
                     </Pie>
@@ -256,7 +308,7 @@ export default function AnalyticsPage() {
         <Card className="p-6">
           <h3 className="text-sm font-bold text-white mb-4">Task Milestone Status</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {taskData.map((td: any) => (
+            {taskData.map((td: TaskEntry) => (
               <div key={td.name} className="p-4 rounded-xl bg-[#0B1020] border border-slate-800 text-center">
                 <p className="text-xs font-semibold text-slate-400">{td.name}</p>
                 <p className="text-2xl font-bold mt-1" style={{ color: td.fill }}>

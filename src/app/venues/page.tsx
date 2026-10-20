@@ -19,17 +19,20 @@ import {
 import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card, Modal } from "@/components/ui";
 import { useEvent } from "@/context/EventContext";
+import { useDebounce } from "@/hooks/useDebounce";
+import type { VenueEntity } from "@/types";
 
 export default function VenuesPage() {
   const { activeEvent } = useEvent();
-  const [venues, setVenues] = useState<any[]>([]);
+  const [venues, setVenues] = useState<VenueEntity[]>([]);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 300);
   const [minCapacity, setMinCapacity] = useState("0");
   const [maxPrice, setMaxPrice] = useState("20000");
   const [loading, setLoading] = useState(true);
 
   // Inquiry modal
-  const [selectedVenue, setSelectedVenue] = useState<any | null>(null);
+  const [selectedVenue, setSelectedVenue] = useState<VenueEntity | null>(null);
   const [inquiryDate, setInquiryDate] = useState("");
   const [inquiryMessage, setInquiryMessage] = useState("");
   const [submittingInquiry, setSubmittingInquiry] = useState(false);
@@ -38,7 +41,7 @@ export default function VenuesPage() {
   const fetchVenues = async () => {
     try {
       const params = new URLSearchParams();
-      if (search) params.append("search", search);
+      if (debouncedSearch) params.append("search", debouncedSearch);
       if (minCapacity !== "0") params.append("minCapacity", minCapacity);
       if (maxPrice) params.append("maxPrice", maxPrice);
 
@@ -56,7 +59,7 @@ export default function VenuesPage() {
 
   useEffect(() => {
     fetchVenues();
-  }, [search, minCapacity, maxPrice]);
+  }, [debouncedSearch, minCapacity, maxPrice]);
 
   const toggleFavorite = async (venueId: string) => {
     try {
@@ -69,7 +72,7 @@ export default function VenuesPage() {
         const data = await res.json();
         setVenues((prev) =>
           prev.map((v) =>
-            v.id === venueId ? { ...v, isFavorited: data.isFavorited } : v
+            v.id === venueId ? { ...v, isFavorite: data.isFavorited } : v
           )
         );
       }
@@ -78,7 +81,7 @@ export default function VenuesPage() {
     }
   };
 
-  const handleOpenInquiry = (venue: any) => {
+  const handleOpenInquiry = (venue: VenueEntity) => {
     setSelectedVenue(venue);
     setInquirySent(false);
     setInquiryMessage(
@@ -175,7 +178,7 @@ export default function VenuesPage() {
             >
               <div className="relative h-52 w-full bg-slate-900 overflow-hidden">
                 <img
-                  src={venue.imageUrl}
+                  src={venue.imageUrl || "/placeholder.jpg"}
                   alt={venue.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -243,7 +246,7 @@ export default function VenuesPage() {
                         ✓ {am}
                       </span>
                     ))}
-                    {venue.amenitiesList?.length > 3 && (
+                    {venue.amenitiesList && venue.amenitiesList.length > 3 && (
                       <span className="px-2 py-0.5 rounded-md bg-[#0B1020] border border-slate-800 text-[10px] text-slate-500">
                         +{venue.amenitiesList.length - 3} more
                       </span>

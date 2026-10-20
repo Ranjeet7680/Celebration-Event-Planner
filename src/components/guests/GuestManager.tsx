@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Users,
   UserPlus,
@@ -18,29 +18,32 @@ import {
   Utensils,
 } from "lucide-react";
 import { Button, Badge, Card, Modal } from "@/components/ui";
+import { useDebounce } from "@/hooks/useDebounce";
+import type { GuestEntity, RsvpStatus } from "@/types";
 
 export function GuestManager({ eventId }: { eventId?: string }) {
-  const [guests, setGuests] = useState<any[]>([]);
+  const [guests, setGuests] = useState<GuestEntity[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 250);
   const [groupFilter, setGroupFilter] = useState("all");
   const [rsvpFilter, setRsvpFilter] = useState("all");
 
   // Add Guest Modal
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingGuest, setEditingGuest] = useState<any | null>(null);
+  const [editingGuest, setEditingGuest] = useState<GuestEntity | null>(null);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [group, setGroup] = useState("Friends");
-  const [rsvpStatus, setRsvpStatus] = useState("pending");
+  const [rsvpStatus, setRsvpStatus] = useState<RsvpStatus>("pending");
   const [plusOne, setPlusOne] = useState("0");
   const [dietary, setDietary] = useState("");
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
 
-  const fetchGuests = async () => {
+  const fetchGuests = useCallback(async () => {
     if (!eventId) return;
     try {
       const res = await fetch(`/api/events/${eventId}/guests`);
@@ -53,11 +56,11 @@ export function GuestManager({ eventId }: { eventId?: string }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [eventId]);
 
   useEffect(() => {
     fetchGuests();
-  }, [eventId]);
+  }, [fetchGuests]);
 
   const handleOpenAdd = () => {
     setEditingGuest(null);
@@ -72,7 +75,7 @@ export function GuestManager({ eventId }: { eventId?: string }) {
     setModalOpen(true);
   };
 
-  const handleOpenEdit = (g: any) => {
+  const handleOpenEdit = (g: GuestEntity) => {
     setEditingGuest(g);
     setName(g.name);
     setEmail(g.email || "");
@@ -184,27 +187,48 @@ export function GuestManager({ eventId }: { eventId?: string }) {
     document.body.removeChild(link);
   };
 
-  // Filtered guests
-  const filtered = guests.filter((g) => {
-    const matchesSearch =
-      g.name.toLowerCase().includes(search.toLowerCase()) ||
-      (g.email && g.email.toLowerCase().includes(search.toLowerCase())) ||
-      (g.notes && g.notes.toLowerCase().includes(search.toLowerCase()));
+  // Filtered guests (memoized for efficiency)
+  const filtered = useMemo(() => {
+    const q = debouncedSearch.toLowerCase();
+    return guests.filter((g) => {
+      const matchesSearch =
+        !q ||
+        g.name.toLowerCase().includes(q) ||
+        (g.email && g.email.toLowerCase().includes(q)) ||
+        (g.notes && g.notes.toLowerCase().includes(q));
 
-    const matchesGroup = groupFilter === "all" || g.group === groupFilter;
-    const matchesRsvp = rsvpFilter === "all" || g.rsvpStatus === rsvpFilter;
+      const matchesGroup = groupFilter === "all" || g.group === groupFilter;
+      const matchesRsvp = rsvpFilter === "all" || g.rsvpStatus === rsvpFilter;
 
-    return matchesSearch && matchesGroup && matchesRsvp;
-  });
+      return matchesSearch && matchesGroup && matchesRsvp;
+    });
+  }, [guests, debouncedSearch, groupFilter, rsvpFilter]);
 
-  // Totals
-  const totalInvited = guests.reduce((sum, g) => sum + 1 + (g.plusOne || 0), 0);
-  const attendingTotal = guests
-    .filter((g) => g.rsvpStatus === "attending")
-    .reduce((sum, g) => sum + 1 + (g.plusOne || 0), 0);
-  const tentativeTotal = guests.filter((g) => g.rsvpStatus === "tentative").length;
-  const declinedTotal = guests.filter((g) => g.rsvpStatus === "declined").length;
-  const pendingTotal = guests.filter((g) => g.rsvpStatus === "pending").length;
+  // Totals (memoized)
+  const { totalInvited, attendingTotal, tentativeTotal, declinedTotal, pendingTotal } = useMemo(() => {
+    let attending = 0;
+    let tentative = 0;
+    let declined = 0;
+    let pending = 0;
+    let total = 0;
+
+    for (const g of guests) {
+      const headcount = 1 + (g.plusOne || 0);
+      total += headcount;
+      if (g.rsvpStatus === "attending") attending += headcount;
+      else if (g.rsvpStatus === "tentative") tentative++;
+      else if (g.rsvpStatus === "declined") declined++;
+      else if (g.rsvpStatus === "pending") pending++;
+    }
+
+    return {
+      totalInvited: total,
+      attendingTotal: attending,
+      tentativeTotal: tentative,
+      declinedTotal: declined,
+      pendingTotal: pending,
+    };
+  }, [guests]);
 
   return (
     <div className="space-y-6">
@@ -500,7 +524,7 @@ export function GuestManager({ eventId }: { eventId?: string }) {
                 </label>
                 <select
                   value={rsvpStatus}
-                  onChange={(e) => setRsvpStatus(e.target.value)}
+                  onChange={(e) => setRsvpStatus(e.target.value as RsvpStatus)}
                   className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
                 >
                   <option value="attending">Attending</option>

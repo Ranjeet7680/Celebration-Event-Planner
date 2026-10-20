@@ -119,3 +119,85 @@ export interface RsvpSummaryStats {
   responseRate: number;
   totalHeadcountWithPlusOnes: number;
 }
+
+export interface VenueEntity {
+  id: string;
+  name: string;
+  location: string;
+  address: string;
+  capacity: number;
+  pricePerHour: number;
+  pricePerDay: number;
+  rating: number;
+  amenities: string;
+  amenitiesList?: string[];
+  contactEmail?: string | null;
+  contactPhone?: string | null;
+  imageUrl?: string | null;
+  isVerified: boolean;
+  isDemo: boolean;
+  isFavorite?: boolean;
+  isFavorited?: boolean;
+}
+
+export interface VendorEntity {
+  id: string;
+  name: string;
+  category: string;
+  location: string;
+  startingPrice: number;
+  rating: number;
+  reviewCount: number;
+  description: string;
+  contactEmail?: string | null;
+  contactPhone?: string | null;
+  imageUrl?: string | null;
+  isVerified: boolean;
+  isDemo: boolean;
+}
+
+export interface EventTemplateEntity {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  estimatedBudget: number;
+  guestCount: number;
+  duration: string;
+  coverImage: string;
+  tags: string;
+  isFavorite: boolean;
+  planData: string;
+}
+
+export interface EventCollaboratorEntity {
+  id: string;
+  eventId: string;
+  userId?: string | null;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  createdAt?: Date | string;
+}
+
+export interface ActivityLogEntity {
+  id: string;
+  eventId?: string | null;
+  userId?: string | null;
+  action: string;
+  entityType: string;
+  entityId?: string | null;
+  metadata?: string | null;
+  createdAt: Date | string;
+}
+
+export interface EventDetailEntity extends EventEntity {
+  tasks?: TaskEntity[];
+  expenses?: ExpenseEntity[];
+  guests?: GuestEntity[];
+  collaborators?: EventCollaboratorEntity[];
+}
+
+export type AiPlannerTab = "overview" | "timeline" | "budget" | "tasks" | "venues" | "vendors" | "risks";
+

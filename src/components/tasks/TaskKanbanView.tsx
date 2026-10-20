@@ -28,9 +28,19 @@ interface TaskItem {
   category: string;
 }
 
+interface TaskMetrics {
+  total: number;
+  todo: number;
+  inProgress: number;
+  completed: number;
+  completionRate?: number;
+  progressPercent?: number;
+  urgentCount: number;
+}
+
 export function TaskKanbanView({ eventId }: { eventId?: string }) {
   const [tasks, setTasks] = useState<TaskItem[]>([]);
-  const [metrics, setMetrics] = useState<any>(null);
+  const [metrics, setMetrics] = useState<TaskMetrics | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Add/Edit modal
@@ -356,7 +366,7 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
                 </label>
                 <select
                   value={priority}
-                  onChange={(e) => setPriority(e.target.value as any)}
+                  onChange={(e) => setPriority(e.target.value as "urgent" | "high" | "medium" | "low")}
                   className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
                 >
                   <option value="urgent">Urgent</option>
@@ -399,7 +409,7 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
               </label>
               <select
                 value={status}
-                onChange={(e) => setStatus(e.target.value as any)}
+                onChange={(e) => setStatus(e.target.value as "todo" | "in_progress" | "completed")}
                 className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
               >
                 <option value="todo">To Do</option>

@@ -38,9 +38,36 @@ interface EventItem {
   expenses: { id: string; amount: number; status: string }[];
 }
 
+interface DashboardAnalytics {
+  summary: {
+    totalEvents: number;
+    totalBudget: number;
+    totalSpent: number;
+    remainingBudget: number;
+    budgetUtilization: number;
+    totalGuests: number;
+    attendingGuests: number;
+    rsvpRate: number;
+    totalTasks: number;
+    completedTasks: number;
+    taskCompletionRate: number;
+  };
+  charts: {
+    spendingByCategory: { category: string; amount: number }[];
+    rsvpBreakdown: { name: string; count: number; fill: string }[];
+    taskBreakdown: { name: string; count: number; fill: string }[];
+  };
+  recentActivities: {
+    id: string;
+    action: string;
+    details?: string;
+    createdAt: string;
+  }[];
+}
+
 export default function DashboardPage() {
   const [events, setEvents] = useState<EventItem[]>([]);
-  const [analytics, setAnalytics] = useState<any>(null);
+  const [analytics, setAnalytics] = useState<DashboardAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -292,7 +319,7 @@ export default function DashboardPage() {
 
             <div className="space-y-3">
               {analytics?.recentActivities?.length ? (
-                analytics.recentActivities.map((act: any) => (
+                analytics.recentActivities.map((act) => (
                   <div
                     key={act.id}
                     className="p-3 rounded-xl bg-slate-800/40 border border-slate-800 flex items-start justify-between gap-3 text-xs"

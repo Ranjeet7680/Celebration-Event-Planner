@@ -16,6 +16,8 @@ import {
 import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card, Modal } from "@/components/ui";
 import { useEvent } from "@/context/EventContext";
+import { useDebounce } from "@/hooks/useDebounce";
+import type { VendorEntity } from "@/types";
 
 const categories = [
   { id: "all", label: "All Categories" },
@@ -29,13 +31,14 @@ const categories = [
 
 export default function VendorsPage() {
   const { activeEvent } = useEvent();
-  const [vendors, setVendors] = useState<any[]>([]);
+  const [vendors, setVendors] = useState<VendorEntity[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 300);
   const [loading, setLoading] = useState(true);
 
   // Inquiry form modal
-  const [selectedVendor, setSelectedVendor] = useState<any | null>(null);
+  const [selectedVendor, setSelectedVendor] = useState<VendorEntity | null>(null);
   const [inquiryBudget, setInquiryBudget] = useState("");
   const [inquiryDate, setInquiryDate] = useState("");
   const [inquiryMessage, setInquiryMessage] = useState("");
@@ -46,7 +49,7 @@ export default function VendorsPage() {
     try {
       const params = new URLSearchParams();
       if (selectedCategory !== "all") params.append("category", selectedCategory);
-      if (search) params.append("search", search);
+      if (debouncedSearch) params.append("search", debouncedSearch);
 
       const res = await fetch(`/api/vendors?${params.toString()}`);
       if (res.ok) {
@@ -62,9 +65,9 @@ export default function VendorsPage() {
 
   useEffect(() => {
     fetchVendors();
-  }, [selectedCategory, search]);
+  }, [selectedCategory, debouncedSearch]);
 
-  const handleOpenInquiry = (v: any) => {
+  const handleOpenInquiry = (v: VendorEntity) => {
     setSelectedVendor(v);
     setInquiryBudget(v.startingPrice.toString());
     const defaultDate = new Date();
@@ -161,7 +164,7 @@ export default function VendorsPage() {
             >
               <div className="relative h-48 w-full bg-slate-900 overflow-hidden">
                 <img
-                  src={vendor.imageUrl}
+                  src={vendor.imageUrl || "/placeholder.jpg"}
                   alt={vendor.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
