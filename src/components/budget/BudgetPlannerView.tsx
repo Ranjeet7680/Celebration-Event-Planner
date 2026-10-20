@@ -1,19 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   DollarSign,
   Plus,
-  TrendingDown,
-  TrendingUp,
   AlertTriangle,
-  Receipt,
   Trash2,
-  Calendar,
-  CheckCircle2,
-  Clock,
   PieChart as PieIcon,
-  Filter,
 } from "lucide-react";
 import {
   BarChart,
@@ -43,7 +36,7 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
   const [budget, setBudget] = useState<BudgetDetail | null>(null);
   const [expenses, setExpenses] = useState<ExpenseEntity[]>([]);
   const [currency, setCurrency] = useState("USD");
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
 
   // Add Expense modal
@@ -58,7 +51,7 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
-  const fetchBudgetAndExpenses = async () => {
+  const fetchBudgetAndExpenses = useCallback(async () => {
     if (!eventId) return;
     try {
       const res = await fetch(`/api/events/${eventId}/expenses`);
@@ -73,11 +66,11 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [eventId]);
 
   useEffect(() => {
     fetchBudgetAndExpenses();
-  }, [eventId]);
+  }, [fetchBudgetAndExpenses]);
 
   const handleOpenAdd = () => {
     setTitle("");

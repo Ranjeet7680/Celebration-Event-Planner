@@ -5,14 +5,32 @@ import { logger } from "./logger";
 
 const SESSION_COOKIE_NAME = "promptwars_session";
 
+/**
+ * Hashes a plaintext password using bcrypt with a salt round of 10.
+ *
+ * @param password - Plaintext password string.
+ * @returns Cryptographic bcrypt hash.
+ */
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10);
 }
 
+/**
+ * Verifies a plaintext password against a bcrypt hash.
+ *
+ * @param password - Plaintext candidate password.
+ * @param hash - Bcrypt hash from the database.
+ * @returns Boolean indicating whether the candidate matches the hash.
+ */
 export async function verifyPassword(password: string, hash: string): Promise<boolean> {
   return bcrypt.compare(password, hash);
 }
 
+/**
+ * Creates an HTTP-only secure session cookie for an authenticated user.
+ *
+ * @param userId - Unique identifier of the authenticated user.
+ */
 export async function createSession(userId: string) {
   try {
     const cookieStore = await cookies();
@@ -28,6 +46,9 @@ export async function createSession(userId: string) {
   }
 }
 
+/**
+ * Destroys the current authenticated user's session cookie.
+ */
 export async function clearSession() {
   try {
     const cookieStore = await cookies();
@@ -37,6 +58,11 @@ export async function clearSession() {
   }
 }
 
+/**
+ * Resolves the authenticated user from the request session cookie or defaults to the verified demo user.
+ *
+ * @returns The active user entity with preferences, or null.
+ */
 export async function getCurrentUser() {
   try {
     const cookieStore = await cookies();

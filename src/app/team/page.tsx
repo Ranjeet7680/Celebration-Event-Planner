@@ -1,16 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   UserCheck,
   UserPlus,
   Shield,
   Activity,
-  Trash2,
-  Mail,
   CheckCircle2,
-  Clock,
-  Sparkles,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card, Modal } from "@/components/ui";
@@ -22,7 +18,7 @@ export default function TeamPage() {
   const { activeEvent } = useEvent();
   const [collaborators, setCollaborators] = useState<EventCollaboratorEntity[]>([]);
   const [activities, setActivities] = useState<ActivityLogEntity[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   // Invite modal
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
@@ -31,7 +27,7 @@ export default function TeamPage() {
   const [inviteRole, setInviteRole] = useState("editor");
   const [inviting, setInviting] = useState(false);
 
-  const fetchTeamAndLogs = async () => {
+  const fetchTeamAndLogs = useCallback(async () => {
     if (!activeEvent) return;
     try {
       const res = await fetch(`/api/events/${activeEvent.id}`);
@@ -45,11 +41,11 @@ export default function TeamPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeEvent]);
 
   useEffect(() => {
     fetchTeamAndLogs();
-  }, [activeEvent]);
+  }, [fetchTeamAndLogs]);
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();

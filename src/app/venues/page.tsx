@@ -1,36 +1,30 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Compass,
   Search,
   MapPin,
   Users,
-  DollarSign,
   Star,
   Heart,
   ShieldCheck,
   Check,
-  Phone,
-  Mail,
   ArrowRight,
-  Filter,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
-import { Button, Badge, Card, Modal } from "@/components/ui";
-import { useEvent } from "@/context/EventContext";
+import { Button, Badge, Modal } from "@/components/ui";
 import { useDebounce } from "@/hooks/useDebounce";
 import { logger } from "@/lib/logger";
 import type { VenueEntity } from "@/types";
 
 export default function VenuesPage() {
-  const { activeEvent } = useEvent();
   const [venues, setVenues] = useState<VenueEntity[]>([]);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 300);
   const [minCapacity, setMinCapacity] = useState("0");
   const [maxPrice, setMaxPrice] = useState("20000");
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   // Inquiry modal
   const [selectedVenue, setSelectedVenue] = useState<VenueEntity | null>(null);
@@ -39,7 +33,7 @@ export default function VenuesPage() {
   const [submittingInquiry, setSubmittingInquiry] = useState(false);
   const [inquirySent, setInquirySent] = useState(false);
 
-  const fetchVenues = async () => {
+  const fetchVenues = useCallback(async () => {
     try {
       const params = new URLSearchParams();
       if (debouncedSearch) params.append("search", debouncedSearch);
@@ -56,11 +50,11 @@ export default function VenuesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [debouncedSearch, minCapacity, maxPrice]);
 
   useEffect(() => {
     fetchVenues();
-  }, [debouncedSearch, minCapacity, maxPrice]);
+  }, [fetchVenues]);
 
   const toggleFavorite = async (venueId: string) => {
     try {

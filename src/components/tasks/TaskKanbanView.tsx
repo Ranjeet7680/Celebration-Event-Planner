@@ -1,19 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   CheckSquare,
   Plus,
   Clock,
   User,
-  AlertCircle,
   Trash2,
   Edit,
   ArrowRight,
   ArrowLeft,
-  CheckCircle2,
-  Calendar,
-  Layers,
 } from "lucide-react";
 import { Button, Badge, Card, Modal } from "@/components/ui";
 import { logger } from "@/lib/logger";
@@ -42,7 +38,7 @@ interface TaskMetrics {
 export function TaskKanbanView({ eventId }: { eventId?: string }) {
   const [tasks, setTasks] = useState<TaskItem[]>([]);
   const [metrics, setMetrics] = useState<TaskMetrics | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   // Add/Edit modal
   const [modalOpen, setModalOpen] = useState(false);
@@ -56,7 +52,7 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
   const [status, setStatus] = useState<"todo" | "in_progress" | "completed">("todo");
   const [saving, setSaving] = useState(false);
 
-  const fetchTasks = async () => {
+  const fetchTasks = useCallback(async () => {
     if (!eventId) return;
     try {
       const res = await fetch(`/api/events/${eventId}/tasks`);
@@ -70,11 +66,11 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [eventId]);
 
   useEffect(() => {
     fetchTasks();
-  }, [eventId]);
+  }, [fetchTasks]);
 
   const handleOpenAdd = (columnStatus?: "todo" | "in_progress" | "completed") => {
     setEditingTask(null);

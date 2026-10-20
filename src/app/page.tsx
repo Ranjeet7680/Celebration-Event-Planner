@@ -9,7 +9,6 @@ import {
   Compass,
   Store,
   ShieldCheck,
-  Star,
   Zap,
 } from "lucide-react";
 import { Button, Badge } from "@/components/ui";

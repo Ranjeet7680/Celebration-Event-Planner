@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sparkles, Check, ArrowRight, Compass, ShieldCheck } from "lucide-react";
+import { Sparkles, Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui";
 import { logger } from "@/lib/logger";
 
@@ -35,7 +35,7 @@ export default function OnboardingPage() {
   ]);
   const [experience, setExperience] = useState("intermediate");
   const [budgetTier, setBudgetTier] = useState("high");
-  const [themePreference, setThemePreference] = useState("midnight");
+  const [themePreference] = useState("midnight");
   const [saving, setSaving] = useState(false);
 
   const toggleInterest = (interest: string) => {

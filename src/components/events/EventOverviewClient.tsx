@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -8,16 +8,10 @@ import {
   DollarSign,
   Users,
   CheckSquare,
-  Clock,
   MapPin,
-  Sparkles,
-  Plus,
-  Share2,
   Edit,
   Trash2,
   Mail,
-  AlertCircle,
-  TrendingUp,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card, Modal } from "@/components/ui";
@@ -40,8 +34,9 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
   const [editLocation, setEditLocation] = useState("");
   const [editBudget, setEditBudget] = useState("");
   const [editStatus, setEditStatus] = useState("planned");
+  const [currentTime] = useState(() => Date.now());
 
-  const fetchEvent = async () => {
+  const fetchEvent = useCallback(async () => {
     try {
       const res = await fetch(`/api/events/${eventId}`);
       if (res.ok) {
@@ -57,11 +52,11 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [eventId]);
 
   useEffect(() => {
     if (eventId) fetchEvent();
-  }, [eventId]);
+  }, [fetchEvent, eventId]);
 
   const handleUpdate = async () => {
     try {
@@ -132,7 +127,7 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
     .reduce((sum: number, g: GuestEntity) => sum + 1 + (g.plusOne || 0), 0) || 0;
 
   const eventDateObj = new Date(event.eventDate);
-  const daysRemaining = Math.ceil((eventDateObj.getTime() - Date.now()) / (1000 * 3600 * 24));
+  const daysRemaining = Math.ceil((eventDateObj.getTime() - currentTime) / (1000 * 3600 * 24));
 
   return (
     <AppShell>

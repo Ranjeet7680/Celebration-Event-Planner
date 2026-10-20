@@ -4,10 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Settings,
-  User,
-  Shield,
-  Bell,
-  Palette,
   LogOut,
   Save,
   CheckCircle2,

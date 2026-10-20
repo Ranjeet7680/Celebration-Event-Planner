@@ -4,8 +4,8 @@ import React from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { useEvent } from "@/context/EventContext";
-import { Calendar, DollarSign, Users, CheckSquare, Plus, ArrowRight } from "lucide-react";
-import { Button, Badge, Card } from "@/components/ui";
+import { Plus, ArrowRight } from "lucide-react";
+import { Button, Badge } from "@/components/ui";
 
 export default function EventsIndexPage() {
   const { events, setActiveEventId } = useEvent();

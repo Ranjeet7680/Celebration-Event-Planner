@@ -77,7 +77,13 @@ export interface AIGenerationResult {
   warning?: string;
 }
 
-// Deterministic intelligent generator for prompt parsing in demo mode
+/**
+ * Generates an intelligent, deterministic, schema-compliant event plan from natural language.
+ * Performs NLP entity extraction for attendee count, currency, budget tiers, locations, and schedules.
+ *
+ * @param prompt - Natural language description of the celebration.
+ * @returns Fully validated and structured event plan conforming to FullEventPlanSchema.
+ */
 export function generateDeterministicPlan(prompt: string): GeneratedEventPlan {
   const p = prompt.toLowerCase();
 
@@ -307,6 +313,13 @@ export function generateDeterministicPlan(prompt: string): GeneratedEventPlan {
   };
 }
 
+/**
+ * Primary AI Event Planning Engine entry point.
+ * Integrates Gemini 1.5 Flash and OpenAI GPT-4o with automated schema validation and deterministic fallback.
+ *
+ * @param prompt - Natural language instruction from the user.
+ * @returns Result object containing the validated plan, execution mode, and active provider.
+ */
 export async function generateEventPlan(prompt: string): Promise<AIGenerationResult> {
   const geminiKey = process.env.GEMINI_API_KEY;
   const openaiKey = process.env.OPENAI_API_KEY;

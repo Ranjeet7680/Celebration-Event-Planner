@@ -1,20 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   FolderOpen,
   Search,
-  Users,
-  DollarSign,
-  Clock,
   Sparkles,
   ArrowRight,
   Star,
-  Check,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
-import { Button, Badge, Card, Modal } from "@/components/ui";
+import { Button, Badge, Modal } from "@/components/ui";
 import { useEvent } from "@/context/EventContext";
 import { useDebounce } from "@/hooks/useDebounce";
 import { logger } from "@/lib/logger";
@@ -27,7 +23,7 @@ export default function TemplatesPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 300);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   // Modal state
   const [selectedTemplate, setSelectedTemplate] = useState<EventTemplateEntity | null>(null);
@@ -35,7 +31,7 @@ export default function TemplatesPage() {
   const [eventDate, setEventDate] = useState("");
   const [creating, setCreating] = useState(false);
 
-  const fetchTemplates = async () => {
+  const fetchTemplates = useCallback(async () => {
     try {
       const params = new URLSearchParams();
       if (selectedCategory !== "all") params.append("category", selectedCategory);
@@ -51,11 +47,11 @@ export default function TemplatesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory, debouncedSearch]);
 
   useEffect(() => {
     fetchTemplates();
-  }, [selectedCategory, debouncedSearch]);
+  }, [fetchTemplates]);
 
   const handleUseTemplate = (tpl: EventTemplateEntity) => {
     setSelectedTemplate(tpl);

@@ -8,17 +8,12 @@ import {
   Save,
   CheckCircle2,
   Calendar,
-  DollarSign,
   Users,
   MapPin,
   Clock,
   ShieldAlert,
-  Layers,
   ArrowRight,
   Info,
-  Check,
-  FileText,
-  SlidersHorizontal,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card } from "@/components/ui";

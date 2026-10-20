@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Store,
   Search,
@@ -8,13 +8,10 @@ import {
   MapPin,
   ShieldCheck,
   Check,
-  DollarSign,
-  ArrowRight,
   Send,
-  Sparkles,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
-import { Button, Badge, Card, Modal } from "@/components/ui";
+import { Button, Badge, Modal } from "@/components/ui";
 import { useEvent } from "@/context/EventContext";
 import { useDebounce } from "@/hooks/useDebounce";
 import { logger } from "@/lib/logger";
@@ -36,7 +33,7 @@ export default function VendorsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 300);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   // Inquiry form modal
   const [selectedVendor, setSelectedVendor] = useState<VendorEntity | null>(null);
@@ -46,7 +43,7 @@ export default function VendorsPage() {
   const [submitting, setSubmitting] = useState(false);
   const [inquirySuccess, setInquirySuccess] = useState(false);
 
-  const fetchVendors = async () => {
+  const fetchVendors = useCallback(async () => {
     try {
       const params = new URLSearchParams();
       if (selectedCategory !== "all") params.append("category", selectedCategory);
@@ -62,11 +59,11 @@ export default function VendorsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory, debouncedSearch]);
 
   useEffect(() => {
     fetchVendors();
-  }, [selectedCategory, debouncedSearch]);
+  }, [fetchVendors]);
 
   const handleOpenInquiry = (v: VendorEntity) => {
     setSelectedVendor(v);

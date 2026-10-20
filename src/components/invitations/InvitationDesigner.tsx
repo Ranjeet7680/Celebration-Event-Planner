@@ -5,16 +5,11 @@ import {
   Sparkles,
   Save,
   Printer,
-  Share2,
-  Palette,
-  Type,
   MapPin,
-  Calendar,
-  CheckCircle2,
   QrCode,
   Layers,
 } from "lucide-react";
-import { Button, Badge, Card } from "@/components/ui";
+import { Button, Card } from "@/components/ui";
 import { logger } from "@/lib/logger";
 
 const templateThemes = [
@@ -34,7 +29,7 @@ export function InvitationDesigner({ eventId }: { eventId?: string }) {
   const [primaryColor, setPrimaryColor] = useState("#8B5CF6");
   const [accentColor, setAccentColor] = useState("#F5C76B");
   const [fontStyle, setFontStyle] = useState("sans");
-  const [isPublished, setIsPublished] = useState(true);
+  const [_isPublished, setIsPublished] = useState(true);
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 

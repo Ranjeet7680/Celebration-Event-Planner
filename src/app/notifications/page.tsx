@@ -10,12 +10,10 @@ import {
   Users,
   DollarSign,
   Info,
-  Clock,
-  Sparkles,
   ArrowRight,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
-import { Button, Badge, Card } from "@/components/ui";
+import { Button, Card } from "@/components/ui";
 
 interface NotificationItem {
   id: string;
@@ -32,7 +30,7 @@ export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [filter, setFilter] = useState("all");
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   const fetchNotifications = async () => {
     try {

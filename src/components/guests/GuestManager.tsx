@@ -6,11 +6,8 @@ import {
   UserPlus,
   Search,
   Download,
-  Filter,
   Trash2,
   Edit,
-  Mail,
-  Phone,
   CheckCircle2,
   XCircle,
   HelpCircle,
@@ -24,7 +21,7 @@ import type { GuestEntity, RsvpStatus } from "@/types";
 
 export function GuestManager({ eventId }: { eventId?: string }) {
   const [guests, setGuests] = useState<GuestEntity[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 250);
   const [groupFilter, setGroupFilter] = useState("all");

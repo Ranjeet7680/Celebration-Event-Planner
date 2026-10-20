@@ -20,8 +20,6 @@ import {
   Menu,
   X,
   Search,
-  Plus,
-  ChevronDown,
   LogOut,
   FolderOpen,
   UserCheck,
@@ -75,10 +73,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { events, activeEvent, setActiveEventId } = useEvent();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [unreadNotifications, setUnreadNotifications] = useState(2);
+  const [unreadNotifications] = useState(2);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   // Keyboard shortcut Ctrl+K / Cmd+K
   useEffect(() => {

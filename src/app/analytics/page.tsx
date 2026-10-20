@@ -1,16 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   BarChart3,
   Download,
   DollarSign,
   Users,
-  CheckSquare,
-  TrendingUp,
-  PieChart as PieIcon,
-  Calendar,
-  FileSpreadsheet,
 } from "lucide-react";
 import {
   BarChart,
@@ -25,7 +20,7 @@ import {
   Pie,
 } from "recharts";
 import { AppShell } from "@/components/layout/AppShell";
-import { Button, Badge, Card } from "@/components/ui";
+import { Button, Card } from "@/components/ui";
 import { useEvent } from "@/context/EventContext";
 import { logger } from "@/lib/logger";
 
@@ -68,12 +63,12 @@ interface AnalyticsPayload {
 }
 
 export default function AnalyticsPage() {
-  const { events, activeEvent } = useEvent();
+  const { events } = useEvent();
   const [selectedEventId, setSelectedEventId] = useState<string>("all");
   const [data, setData] = useState<AnalyticsPayload | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     try {
       const url = selectedEventId === "all" ? "/api/analytics" : `/api/analytics?eventId=${selectedEventId}`;
       const res = await fetch(url);
@@ -86,11 +81,11 @@ export default function AnalyticsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedEventId]);
 
   useEffect(() => {
     fetchAnalytics();
-  }, [selectedEventId]);
+  }, [fetchAnalytics]);
 
   const handleExportReport = () => {
     if (!data) return;

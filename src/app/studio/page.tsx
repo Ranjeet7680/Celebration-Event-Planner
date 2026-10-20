@@ -1,14 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Palette,
   Sparkles,
   Plus,
   Check,
   Copy,
-  Image as ImageIcon,
-  Layers,
   Heart,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";

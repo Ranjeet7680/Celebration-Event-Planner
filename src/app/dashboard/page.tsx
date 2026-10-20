@@ -16,7 +16,6 @@ import {
   Store,
   ChevronRight,
   TrendingUp,
-  AlertCircle,
   Activity,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
@@ -69,7 +68,7 @@ interface DashboardAnalytics {
 export default function DashboardPage() {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [analytics, setAnalytics] = useState<DashboardAnalytics | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
