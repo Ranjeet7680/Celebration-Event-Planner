@@ -1,7 +1,7 @@
 # Celebration-Event-Planner
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/assets/header-banner.svg" alt="PromptWars Celebration &amp; Event Planner Header Banner" width="100%" />
+  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/public/assets/header-banner.svg" alt="PromptWars Celebration &amp; Event Planner Header Banner" width="100%" />
 </p>
 
 <p align="center">
@@ -26,7 +26,7 @@
 ### 1. AI Event Synthesis Pipeline
 Natural-language vision transformed through structured Zod schema validation into multi-entity database records:
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/assets/diagram-ai-workflow.svg" alt="AI Event Synthesis Flow" width="100%" />
+  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/public/assets/diagram-ai-workflow.svg" alt="AI Event Synthesis Flow" width="100%" />
 </p>
 
 ---
@@ -34,7 +34,7 @@ Natural-language vision transformed through structured Zod schema validation int
 ### 2. Full-Stack System Architecture Topology
 Client presentation, Next.js server route handlers, AI multi-model provider adapter, and Prisma relational persistence:
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/assets/diagram-architecture.svg" alt="System Architecture Topology" width="100%" />
+  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/public/assets/diagram-architecture.svg" alt="System Architecture Topology" width="100%" />
 </p>
 
 ---
@@ -42,7 +42,7 @@ Client presentation, Next.js server route handlers, AI multi-model provider adap
 ### 3. Five-Stage Celebration Orchestration Lifecycle
 Continuous execution loop connecting prompts, blueprint validation, operations, RSVPs, and live execution:
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/assets/diagram-lifecycle.svg" alt="Celebration Orchestration Lifecycle" width="100%" />
+  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/public/assets/diagram-lifecycle.svg" alt="Celebration Orchestration Lifecycle" width="100%" />
 </p>
 
 ---
