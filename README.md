@@ -1,13 +1,11 @@
 # Celebration-Event-Planner
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/public/assets/header-banner.svg" alt="PromptWars Celebration &amp; Event Planner Header Banner" width="100%" />
-</p>
+<div align="center">
 
-<p align="center">
-  <strong>Every celebration starts with a spark.</strong><br>
-  A production-grade, AI-powered celebration and event planning platform built with Next.js 16, React 19, TypeScript, Tailwind CSS, Prisma ORM, and Recharts.
-</p>
+![PromptWars Celebration & Event Planner Header Banner](public/assets/header-banner.svg)
+
+**Every celebration starts with a spark.**<br>
+A production-grade, AI-powered celebration and event planning platform built with Next.js 16, React 19, TypeScript, Tailwind CSS, Prisma ORM, and Recharts.
 
 <p align="center">
   <a href="https://nifty-franklin.vercel.app"><img src="https://img.shields.io/badge/Live_Demo-Vercel_Production-000000?style=for-the-badge&logo=vercel" alt="Vercel Live Demo" /></a>
@@ -20,31 +18,42 @@
   <a href="https://github.com/Ranjeet7680/Celebration-Event-Planner/wiki"><img src="https://img.shields.io/badge/Documentation-Wiki-8B5CF6?style=for-the-badge&logo=gitbook" alt="GitHub Wiki" /></a>
 </p>
 
+</div>
+
 ---
 
 ## 📸 Architectural & Workflow Visualizations
 
 ### 1. AI Event Synthesis Pipeline
 Natural-language vision transformed through structured Zod schema validation into multi-entity database records:
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/public/assets/diagram-ai-workflow.svg" alt="AI Event Synthesis Flow" width="100%" />
-</p>
+
+<div align="center">
+
+![AI Event Synthesis Flow](public/assets/diagram-ai-workflow.svg)
+
+</div>
 
 ---
 
 ### 2. Full-Stack System Architecture Topology
 Client presentation, Next.js server route handlers, AI multi-model provider adapter, and Prisma relational persistence:
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/public/assets/diagram-architecture.svg" alt="System Architecture Topology" width="100%" />
-</p>
+
+<div align="center">
+
+![System Architecture Topology](public/assets/diagram-architecture.svg)
+
+</div>
 
 ---
 
 ### 3. Five-Stage Celebration Orchestration Lifecycle
 Continuous execution loop connecting prompts, blueprint validation, operations, RSVPs, and live execution:
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/public/assets/diagram-lifecycle.svg" alt="Celebration Orchestration Lifecycle" width="100%" />
-</p>
+
+<div align="center">
+
+![Celebration Orchestration Lifecycle](public/assets/diagram-lifecycle.svg)
+
+</div>
 
 ---
 
