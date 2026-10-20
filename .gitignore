@@ -35,6 +35,7 @@ yarn-error.log*
 
 # sqlite dev db
 *.db
+!prisma/dev.db
 *.db-journal
 *.db-shm
 *.db-wal
