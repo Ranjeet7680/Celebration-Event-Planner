@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 380" width="1200" height="380">
+  <defs>
+    <!-- Background Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B1020" />
+      <stop offset="50%" stop-color="#11182B" />
+      <stop offset="100%" stop-color="#080C18" />
+    </linearGradient>
+
+    <!-- Glowing Accent Gradients -->
+    <linearGradient id="violetIndigo" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="50%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#F5C76B" />
+    </linearGradient>
+
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5C76B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+
+    <radialGradient id="ambientGlow1" cx="30%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="ambientGlow2" cx="80%" cy="60%" r="50%">
+      <stop offset="0%" stop-color="#F5C76B" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#F5C76B" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Filters for Glow -->
+    <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+    </filter>
+
+    <style>
+      .pulse-slow {
+        animation: pulseSlow 6s ease-in-out infinite alternate;
+      }
+      .spin-slow {
+        animation: spinSlow 20s linear infinite;
+        transform-origin: 1060px 100px;
+      }
+      .float-badge-1 {
+        animation: floatAnim 4s ease-in-out infinite alternate;
+      }
+      .float-badge-2 {
+        animation: floatAnim 4.5s ease-in-out 1s infinite alternate;
+      }
+      .float-badge-3 {
+        animation: floatAnim 5s ease-in-out 0.5s infinite alternate;
+      }
+      .sparkle-twinkle {
+        animation: twinkle 3s ease-in-out infinite alternate;
+      }
+
+      @keyframes pulseSlow {
+        0% { opacity: 0.6; transform: scale(0.98); }
+        100% { opacity: 1; transform: scale(1.02); }
+      }
+      @keyframes spinSlow {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      @keyframes floatAnim {
+        0% { transform: translateY(0px); }
+        100% { transform: translateY(-8px); }
+      }
+      @keyframes twinkle {
+        0% { opacity: 0.3; transform: scale(0.85); }
+        50% { opacity: 1; transform: scale(1.15); }
+        100% { opacity: 0.4; transform: scale(0.9); }
+      }
+    </style>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="1200" height="380" rx="24" fill="url(#bgGrad)" />
+  <rect width="1200" height="380" rx="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2" />
+
+  <!-- Ambient Glow Orbs -->
+  <circle cx="350" cy="160" r="280" fill="url(#ambientGlow1)" class="pulse-slow" />
+  <circle cx="950" cy="220" r="260" fill="url(#ambientGlow2)" class="pulse-slow" />
+
+  <!-- Subtle Vector Grid Pattern -->
+  <g stroke="rgba(255,255,255,0.03)" stroke-width="1">
+    <line x1="100" y1="0" x2="100" y2="380" />
+    <line x1="200" y1="0" x2="200" y2="380" />
+    <line x1="300" y1="0" x2="300" y2="380" />
+    <line x1="400" y1="0" x2="400" y2="380" />
+    <line x1="500" y1="0" x2="500" y2="380" />
+    <line x1="600" y1="0" x2="600" y2="380" />
+    <line x1="700" y1="0" x2="700" y2="380" />
+    <line x1="800" y1="0" x2="800" y2="380" />
+    <line x1="900" y1="0" x2="900" y2="380" />
+    <line x1="1000" y1="0" x2="1000" y2="380" />
+    <line x1="1100" y1="0" x2="1100" y2="380" />
+    <line x1="0" y1="80" x2="1200" y2="80" />
+    <line x1="0" y1="160" x2="1200" y2="160" />
+    <line x1="0" y1="240" x2="1200" y2="240" />
+    <line x1="0" y1="320" x2="1200" y2="320" />
+  </g>
+
+  <!-- Animated Celestial Ring Graphic (Right) -->
+  <g class="spin-slow" opacity="0.65">
+    <circle cx="1060" cy="100" r="85" fill="none" stroke="url(#violetIndigo)" stroke-width="1.5" stroke-dasharray="8 6" />
+    <circle cx="1060" cy="100" r="120" fill="none" stroke="rgba(245,199,107,0.3)" stroke-width="1" stroke-dasharray="14 10" />
+    <circle cx="1060" cy="15" r="4" fill="#F5C76B" />
+    <circle cx="1145" cy="100" r="5" fill="#8B5CF6" />
+  </g>
+
+  <!-- Animated Twinkle Stars -->
+  <g fill="#F5C76B" class="sparkle-twinkle">
+    <!-- Star 1 -->
+    <path d="M120 70 L123 80 L133 83 L123 86 L120 96 L117 86 L107 83 L117 80 Z" opacity="0.8" />
+    <!-- Star 2 -->
+    <path d="M480 50 L482 57 L489 59 L482 61 L480 68 L478 61 L471 59 L478 57 Z" opacity="0.6" />
+    <!-- Star 3 -->
+    <path d="M820 85 L822 93 L830 95 L822 97 L820 105 L818 97 L810 95 L818 93 Z" opacity="0.75" />
+    <!-- Star 4 -->
+    <path d="M1020 280 L1022 287 L1029 289 L1022 291 L1020 298 L1018 291 L1011 289 L1018 287 Z" opacity="0.7" />
+    <!-- Star 5 -->
+    <path d="M220 310 L221 316 L227 317 L221 319 L220 325 L218 319 L212 317 L218 316 Z" opacity="0.5" />
+  </g>
+
+  <!-- Left Side: Icon & Brand -->
+  <g transform="translate(80, 70)">
+    <!-- Brand Logo Icon Container -->
+    <rect x="0" y="0" width="60" height="60" rx="16" fill="url(#violetIndigo)" filter="url(#glowFilter)" />
+    <!-- Sparkles Symbol -->
+    <path d="M30 14 L33.5 25 L44.5 28.5 L33.5 32 L30 43 L26.5 32 L15.5 28.5 L26.5 25 Z" fill="#FFFBEB" />
+    <circle cx="41" cy="18" r="2.5" fill="#FDE68A" />
+    <circle cx="20" cy="39" r="2" fill="#FDE68A" />
+
+    <!-- Eyebrow Pill -->
+    <g transform="translate(80, 5)">
+      <rect x="0" y="0" width="260" height="26" rx="13" fill="rgba(139,92,246,0.18)" stroke="rgba(139,92,246,0.4)" stroke-width="1" />
+      <circle cx="12" cy="13" r="4" fill="#34D399" />
+      <text x="24" y="17" fill="#C4B5FD" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" letter-spacing="0.5">NEXT-GEN EVENT INTELLIGENCE</text>
+    </g>
+
+    <!-- Main Title -->
+    <text x="80" y="65" fill="#F8FAFC" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="900" letter-spacing="-1">
+      PromptWars
+    </text>
+    <text x="350" y="65" fill="url(#goldGrad)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="900" letter-spacing="-1">
+      Planner
+    </text>
+
+    <!-- Subtitle / Brand Tagline -->
+    <text x="0" y="105" fill="#F5C76B" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="700" font-style="italic">
+      &ldquo;Every celebration starts with a spark.&rdquo;
+    </text>
+
+    <!-- Description Paragraph -->
+    <text x="0" y="135" fill="#94A3B8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13.5" font-weight="400">
+      Production-grade AI event architecture &bull; Real-time budget guard &bull; VIP guest RSVP matrix
+    </text>
+    <text x="0" y="156" fill="#94A3B8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13.5" font-weight="400">
+      Venue discovery &bull; Vendor marketplace &bull; Kanban milestone execution &bull; 20 Full Pages
+    </text>
+  </g>
+
+  <!-- Interactive Floating Badges (Right/Bottom) -->
+  <!-- Badge 1: AI Engine -->
+  <g transform="translate(80, 290)" class="float-badge-1">
+    <rect x="0" y="0" width="220" height="42" rx="14" fill="#171F35" stroke="rgba(139,92,246,0.5)" stroke-width="1.2" filter="url(#glowFilter)" />
+    <circle cx="22" cy="21" r="9" fill="rgba(139,92,246,0.3)" />
+    <path d="M22 15 L23.5 19.5 L28 21 L23.5 22.5 L22 27 L20.5 22.5 L16 21 L20.5 19.5 Z" fill="#F5C76B" />
+    <text x="39" y="25" fill="#F8FAFC" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="700">AI Event Engine (Zod)</text>
+  </g>
+
+  <!-- Badge 2: Budget Guard -->
+  <g transform="translate(320, 290)" class="float-badge-2">
+    <rect x="0" y="0" width="230" height="42" rx="14" fill="#171F35" stroke="rgba(245,199,107,0.5)" stroke-width="1.2" filter="url(#glowFilter)" />
+    <circle cx="22" cy="21" r="9" fill="rgba(245,199,107,0.25)" />
+    <text x="18" y="26" fill="#F5C76B" font-family="monospace" font-size="14" font-weight="900">$</text>
+    <text x="39" y="25" fill="#F8FAFC" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="700">Real-Time Budget Guard</text>
+  </g>
+
+  <!-- Badge 3: 20 Full Pages -->
+  <g transform="translate(570, 290)" class="float-badge-3">
+    <rect x="0" y="0" width="200" height="42" rx="14" fill="#171F35" stroke="rgba(52,211,153,0.5)" stroke-width="1.2" filter="url(#glowFilter)" />
+    <circle cx="22" cy="21" r="9" fill="rgba(52,211,153,0.25)" />
+    <path d="M18 21 L21 24 L26 18" fill="none" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="39" y="25" fill="#F8FAFC" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="700">20 Pages &amp; 29 Tests</text>
+  </g>
+
+  <!-- Badge 4: Relational Stack -->
+  <g transform="translate(790, 290)" class="float-badge-1">
+    <rect x="0" y="0" width="230" height="42" rx="14" fill="#171F35" stroke="rgba(99,102,241,0.5)" stroke-width="1.2" filter="url(#glowFilter)" />
+    <circle cx="22" cy="21" r="9" fill="rgba(99,102,241,0.25)" />
+    <text x="16" y="25" fill="#A5B4FC" font-family="sans-serif" font-size="12" font-weight="900">⚡</text>
+    <text x="39" y="25" fill="#F8FAFC" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="700">Next.js 16 + React 19</text>
+  </g>
+</svg>

@@ -1,8 +1,8 @@
 # Celebration-Event-Planner
 
-<div align="center">
-  <img src="./public/assets/header-banner.svg" alt="PromptWars Celebration &amp; Event Planner Header Banner" width="100%" />
-</div>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/assets/header-banner.svg" alt="PromptWars Celebration &amp; Event Planner Header Banner" width="100%" />
+</p>
 
 <p align="center">
   <strong>Every celebration starts with a spark.</strong><br>
@@ -16,6 +16,7 @@
   <img src="https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=for-the-badge&logo=tailwind-css" alt="Tailwind CSS v4" />
   <img src="https://img.shields.io/badge/Prisma-6.4.1-2D3748?style=for-the-badge&logo=prisma" alt="Prisma ORM" />
   <img src="https://img.shields.io/badge/Tests-29%20Passed-34D399?style=for-the-badge" alt="Automated Tests" />
+  <a href="https://github.com/Ranjeet7680/Celebration-Event-Planner/wiki"><img src="https://img.shields.io/badge/Documentation-Wiki-8B5CF6?style=for-the-badge&logo=gitbook" alt="GitHub Wiki" /></a>
 </p>
 
 ---
@@ -24,25 +25,25 @@
 
 ### 1. AI Event Synthesis Pipeline
 Natural-language vision transformed through structured Zod schema validation into multi-entity database records:
-<div align="center">
-  <img src="./public/assets/diagram-ai-workflow.svg" alt="AI Event Synthesis Flow" width="100%" />
-</div>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/assets/diagram-ai-workflow.svg" alt="AI Event Synthesis Flow" width="100%" />
+</p>
 
 ---
 
 ### 2. Full-Stack System Architecture Topology
 Client presentation, Next.js server route handlers, AI multi-model provider adapter, and Prisma relational persistence:
-<div align="center">
-  <img src="./public/assets/diagram-architecture.svg" alt="System Architecture Topology" width="100%" />
-</div>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/assets/diagram-architecture.svg" alt="System Architecture Topology" width="100%" />
+</p>
 
 ---
 
 ### 3. Five-Stage Celebration Orchestration Lifecycle
 Continuous execution loop connecting prompts, blueprint validation, operations, RSVPs, and live execution:
-<div align="center">
-  <img src="./public/assets/diagram-lifecycle.svg" alt="Celebration Orchestration Lifecycle" width="100%" />
-</div>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Ranjeet7680/Celebration-Event-Planner/main/assets/diagram-lifecycle.svg" alt="Celebration Orchestration Lifecycle" width="100%" />
+</p>
 
 ---
 
