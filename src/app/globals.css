@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-midnight: #0B1020;
+    --bg-secondary: #11182B;
+    --bg-card: #171F35;
+    --bg-card-hover: #1E2945;
+    --primary-violet: #8B5CF6;
+    --primary-indigo: #6366F1;
+    --celebration-gold: #F5C76B;
+    --text-main: #F8FAFC;
+    --text-muted: #A7B0C5;
+    --color-success: #34D399;
+    --color-error: #FB7185;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-accent: rgba(139, 92, 246, 0.3);
+  }
+
+  body {
+    background-color: var(--bg-midnight);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+}
+
+/* Glassmorphism and ambient glow utilities */
+.glass-panel {
+  background: rgba(23, 31, 53, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-hover:hover {
+  background: rgba(30, 41, 69, 0.85);
+  border-color: rgba(139, 92, 246, 0.35);
+  box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.15);
+}
+
+.glow-violet {
+  box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.4);
+}
+
+.glow-gold {
+  box-shadow: 0 0 25px -5px rgba(245, 199, 107, 0.35);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #F8FAFC 0%, #A7B0C5 50%, #8B5CF6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-celebration {
+  background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 50%, #F5C76B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.badge-gold {
+  background: rgba(245, 199, 107, 0.15);
+  color: #F5C76B;
+  border: 1px solid rgba(245, 199, 107, 0.3);
+}
+
+.badge-violet {
+  background: rgba(139, 92, 246, 0.15);
+  color: #A78BFA;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.badge-success {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34D399;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0B1020;
+}
+::-webkit-scrollbar-thumb {
+  background: #1E2945;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6366F1;
+}

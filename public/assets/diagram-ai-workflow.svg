@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="flowBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B1020" />
+      <stop offset="100%" stop-color="#11182B" />
+    </linearGradient>
+
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#171F35" />
+      <stop offset="100%" stop-color="#1B243E" />
+    </linearGradient>
+
+    <linearGradient id="violetIndigo" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#6366F1" />
+    </linearGradient>
+
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5C76B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+
+    <filter id="boxGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <style>
+      .pulse-flow {
+        animation: pulseLine 2.5s ease-in-out infinite;
+      }
+      .moving-particle {
+        animation: moveParticle 3s linear infinite;
+      }
+      .moving-particle-2 {
+        animation: moveParticle 3s linear 1.5s infinite;
+      }
+      .glow-box {
+        animation: boxGlowAnim 3s ease-in-out infinite alternate;
+      }
+      @keyframes pulseLine {
+        0%, 100% { stroke-opacity: 0.3; }
+        50% { stroke-opacity: 1; }
+      }
+      @keyframes boxGlowAnim {
+        0% { stroke-color: #8B5CF6; }
+        100% { stroke: #F5C76B; }
+      }
+      @keyframes moveParticle {
+        0% { offset-distance: 0%; opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { offset-distance: 100%; opacity: 0; }
+      }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="480" rx="20" fill="url(#flowBg)" stroke="rgba(255,255,255,0.08)" stroke-width="2" />
+
+  <!-- Diagram Title -->
+  <g transform="translate(50, 45)">
+    <rect x="0" y="0" width="180" height="24" rx="12" fill="rgba(139,92,246,0.18)" stroke="rgba(139,92,246,0.4)" stroke-width="1" />
+    <text x="12" y="16" fill="#C4B5FD" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="700">DIAGRAM 1 : AI SYNTHESIS PIPELINE</text>
+    <text x="0" y="50" fill="#F8FAFC" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22" font-weight="800">Natural-Language to Relational Execution Pipeline</text>
+  </g>
+
+  <!-- Connecting Bus Lines -->
+  <path d="M 230 240 L 300 240" fill="none" stroke="#6366F1" stroke-width="2.5" stroke-dasharray="6 4" class="pulse-flow" />
+  <path d="M 490 240 L 550 240" fill="none" stroke="#8B5CF6" stroke-width="2.5" stroke-dasharray="6 4" class="pulse-flow" />
+  <path d="M 740 240 L 800 240" fill="none" stroke="#F5C76B" stroke-width="2.5" stroke-dasharray="6 4" class="pulse-flow" />
+
+  <!-- Flow Step 1: User Prompt Input -->
+  <g transform="translate(50, 150)">
+    <rect width="180" height="180" rx="16" fill="url(#cardGrad)" stroke="rgba(139,92,246,0.4)" stroke-width="1.5" />
+    <circle cx="90" cy="40" r="18" fill="rgba(139,92,246,0.2)" />
+    <text x="90" y="45" fill="#A78BFA" font-family="sans-serif" font-size="14" font-weight="900" text-anchor="middle">1</text>
+    <text x="90" y="78" fill="#F8FAFC" font-family="sans-serif" font-size="14" font-weight="700" text-anchor="middle">Natural Language</text>
+    <text x="90" y="96" fill="#F5C76B" font-family="sans-serif" font-size="11" font-weight="600" text-anchor="middle">User Vision Prompt</text>
+    <rect x="20" y="112" width="140" height="50" rx="8" fill="#0B1020" stroke="rgba(255,255,255,0.06)" />
+    <text x="30" y="128" fill="#94A3B8" font-family="monospace" font-size="9">&quot;800 guests in</text>
+    <text x="30" y="140" fill="#94A3B8" font-family="monospace" font-size="9">Kolkata, &#x20B9;5L budget,</text>
+    <text x="30" y="152" fill="#94A3B8" font-family="monospace" font-size="9">stage, sound, food...&quot;</text>
+  </g>
+
+  <!-- Flow Step 2: Extraction & Provider Adapter -->
+  <g transform="translate(300, 140)">
+    <rect width="190" height="200" rx="16" fill="url(#cardGrad)" stroke="#8B5CF6" stroke-width="1.5" filter="url(#boxGlow)" />
+    <circle cx="95" cy="40" r="18" fill="rgba(139,92,246,0.3)" />
+    <text x="95" y="45" fill="#C4B5FD" font-family="sans-serif" font-size="14" font-weight="900" text-anchor="middle">2</text>
+    <text x="95" y="78" fill="#F8FAFC" font-family="sans-serif" font-size="14" font-weight="700" text-anchor="middle">Provider Adapter</text>
+    <text x="95" y="96" fill="#A78BFA" font-family="sans-serif" font-size="11" font-weight="600" text-anchor="middle">Multi-Model Engine</text>
+
+    <!-- Sub-boxes -->
+    <rect x="18" y="112" width="154" height="22" rx="6" fill="#0B1020" stroke="rgba(99,102,241,0.4)" />
+    <text x="26" y="127" fill="#818CF8" font-family="sans-serif" font-size="10" font-weight="600">&bull; Gemini 1.5 Flash</text>
+
+    <rect x="18" y="138" width="154" height="22" rx="6" fill="#0B1020" stroke="rgba(52,211,153,0.4)" />
+    <text x="26" y="153" fill="#34D399" font-family="sans-serif" font-size="10" font-weight="600">&bull; OpenAI GPT-4o</text>
+
+    <rect x="18" y="164" width="154" height="22" rx="6" fill="#0B1020" stroke="rgba(245,199,107,0.4)" />
+    <text x="26" y="179" fill="#F5C76B" font-family="sans-serif" font-size="10" font-weight="600">&bull; Local Demo Engine</text>
+  </g>
+
+  <!-- Flow Step 3: Zod Schema Validation -->
+  <g transform="translate(550, 140)">
+    <rect width="190" height="200" rx="16" fill="url(#cardGrad)" stroke="#6366F1" stroke-width="1.5" />
+    <circle cx="95" cy="40" r="18" fill="rgba(99,102,241,0.2)" />
+    <text x="95" y="45" fill="#818CF8" font-family="sans-serif" font-size="14" font-weight="900" text-anchor="middle">3</text>
+    <text x="95" y="78" fill="#F8FAFC" font-family="sans-serif" font-size="14" font-weight="700" text-anchor="middle">Structured Output</text>
+    <text x="95" y="96" fill="#34D399" font-family="sans-serif" font-size="11" font-weight="600" text-anchor="middle">Zod Schema Validation</text>
+
+    <!-- Checklist -->
+    <g transform="translate(25, 115)" font-family="sans-serif" font-size="10" fill="#94A3B8">
+      <text x="0" y="12" fill="#34D399">&check;</text><text x="14" y="12">6 Budget Categories</text>
+      <text x="0" y="28" fill="#34D399">&check;</text><text x="14" y="28">4-Phase Milestones</text>
+      <text x="0" y="44" fill="#34D399">&check;</text><text x="14" y="44">48-Hr Hourly Rundown</text>
+      <text x="0" y="60" fill="#34D399">&check;</text><text x="14" y="60">Prioritized Task Array</text>
+      <text x="0" y="76" fill="#34D399">&check;</text><text x="14" y="76">Risk Contingency Plan</text>
+    </g>
+  </g>
+
+  <!-- Flow Step 4: Database Entity Deployment -->
+  <g transform="translate(800, 130)">
+    <rect width="160" height="220" rx="16" fill="url(#cardGrad)" stroke="#F5C76B" stroke-width="1.5" />
+    <circle cx="80" cy="35" r="18" fill="rgba(245,199,107,0.25)" />
+    <text x="80" y="40" fill="#F5C76B" font-family="sans-serif" font-size="14" font-weight="900" text-anchor="middle">4</text>
+    <text x="80" y="70" fill="#F8FAFC" font-family="sans-serif" font-size="13" font-weight="700" text-anchor="middle">Prisma Relational</text>
+    <text x="80" y="86" fill="#F5C76B" font-family="sans-serif" font-size="10" font-weight="600" text-anchor="middle">Entity Deployment</text>
+
+    <!-- Created records -->
+    <g transform="translate(15, 100)" font-family="sans-serif" font-size="10" fill="#E2E8F0">
+      <rect x="0" y="0" width="130" height="20" rx="5" fill="#0B1020" />
+      <text x="8" y="14" fill="#A78BFA">&bull; Event Record</text>
+
+      <rect x="0" y="24" width="130" height="20" rx="5" fill="#0B1020" />
+      <text x="8" y="38" fill="#34D399">&bull; 8 Kanban Tasks</text>
+
+      <rect x="0" y="48" width="130" height="20" rx="5" fill="#0B1020" />
+      <text x="8" y="62" fill="#F5C76B">&bull; Budget Ledger</text>
+
+      <rect x="0" y="72" width="130" height="20" rx="5" fill="#0B1020" />
+      <text x="8" y="86" fill="#EC4899">&bull; Digital Invitation</text>
+
+      <rect x="0" y="96" width="130" height="20" rx="5" fill="#0B1020" />
+      <text x="8" y="110" fill="#60A5FA">&bull; Live Audit Logs</text>
+    </g>
+  </g>
+
+  <!-- Bottom Annotation -->
+  <g transform="translate(50, 420)">
+    <text x="0" y="0" fill="#64748B" font-family="sans-serif" font-size="11">
+      &bull; Zero-mock guarantee: 1-click &ldquo;Accept &amp; Create Event&rdquo; validates data against Prisma relational schema and redirects to live dashboard.
+    </text>
+  </g>
+</svg>

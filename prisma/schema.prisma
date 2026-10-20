@@ -1,0 +1,326 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String          @id @default(uuid())
+  email        String          @unique
+  passwordHash String
+  name         String
+  role         String          @default("user") // admin, user, planner
+  avatar       String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  preferences  UserPreference?
+  events       Event[]         @relation("UserEvents")
+  collaborations EventCollaborator[]
+  favorites    VenueFavorite[]
+  inquiries    VendorInquiry[]
+  notifications Notification[]
+  activityLogs ActivityLog[]
+}
+
+model UserPreference {
+  id                    String   @id @default(uuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme                 String   @default("dark") // dark, light, midnight
+  interests             String   @default("[]") // JSON string of interests
+  eventTypes            String   @default("[]") // JSON string
+  budgetRange           String   @default("medium")
+  planningExperience    String   @default("intermediate") // beginner, intermediate, expert
+  notificationsEnabled  Boolean  @default(true)
+  emailUpdates          Boolean  @default(false)
+  updatedAt             DateTime @updatedAt
+}
+
+model Event {
+  id              String             @id @default(uuid())
+  userId          String
+  user            User               @relation("UserEvents", fields: [userId], references: [id], onDelete: Cascade)
+  title           String
+  description     String?
+  category        String             @default("General") // Wedding, Corporate, Birthday, Cultural, Conference, etc.
+  eventDate       DateTime
+  endDate         DateTime?
+  location        String
+  venueId         String?
+  estimatedGuests Int                @default(50)
+  budget          Float              @default(0)
+  currency        String             @default("USD")
+  status          String             @default("planned") // draft, planned, active, completed, cancelled
+  coverImage      String?
+  tags            String             @default("[]") // JSON string
+  isDemo          Boolean            @default(false)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  collaborators   EventCollaborator[]
+  plans           EventPlan[]
+  guests          Guest[]
+  invitations     Invitation[]
+  expenses        Expense[]
+  tasks           Task[]
+  moodboards      Moodboard[]
+  activityLogs    ActivityLog[]
+  vendorInquiries VendorInquiry[]
+  budgetSummary   Budget?
+}
+
+model EventCollaborator {
+  id        String   @id @default(uuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  name      String
+  email     String
+  role      String   @default("editor") // owner, admin, editor, viewer
+  status    String   @default("active") // pending, active
+  createdAt DateTime @default(now())
+}
+
+model EventTemplate {
+  id              String   @id @default(uuid())
+  title           String
+  category        String
+  description     String
+  estimatedBudget Float
+  guestCount      Int
+  duration        String
+  coverImage      String
+  tags            String   @default("[]") // JSON array
+  isFavorite      Boolean  @default(false)
+  planData        String   // JSON string of full pre-baked plan
+  createdAt       DateTime @default(now())
+}
+
+model EventPlan {
+  id              String   @id @default(uuid())
+  eventId         String
+  event           Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  prompt          String
+  rawJson         String   // Detailed JSON structure
+  planSummary     String?
+  isGeneratedByAi Boolean  @default(true)
+  isDemoMode      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Guest {
+  id                  String   @id @default(uuid())
+  eventId             String
+  event               Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name                String
+  email               String?
+  phone               String?
+  group               String   @default("Friends") // VIP, Family, Friends, Colleagues, Vendors
+  rsvpStatus          String   @default("pending") // attending, declined, tentative, pending
+  invitationStatus    String   @default("not_sent") // sent, delivered, opened, not_sent
+  dietaryRestrictions String?
+  plusOne             Int      @default(0)
+  notes               String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Invitation {
+  id           String   @id @default(uuid())
+  eventId      String
+  event        Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  templateName String   @default("Modern Elegant")
+  headline     String
+  message      String
+  venueAddress String?
+  dressCode    String?
+  primaryColor String   @default("#8B5CF6")
+  accentColor  String   @default("#F5C76B")
+  fontStyle    String   @default("serif")
+  isPublished  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Venue {
+  id           String          @id @default(uuid())
+  name         String
+  location     String
+  address      String
+  capacity     Int
+  pricePerHour Float           @default(0)
+  pricePerDay  Float           @default(0)
+  rating       Float           @default(4.8)
+  amenities    String          @default("[]") // JSON string array
+  contactEmail String?
+  contactPhone String?
+  imageUrl     String?
+  isVerified   Boolean         @default(true)
+  isDemo       Boolean         @default(true)
+  createdAt    DateTime        @default(now())
+
+  favorites    VenueFavorite[]
+}
+
+model VenueFavorite {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  venueId   String
+  venue     Venue    @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, venueId])
+}
+
+model Vendor {
+  id           String          @id @default(uuid())
+  name         String
+  category     String          // decorator, caterer, photographer, entertainer, florist, event_manager
+  location     String
+  startingPrice Float          @default(500)
+  rating       Float           @default(4.9)
+  reviewCount  Int             @default(24)
+  description  String
+  contactEmail String?
+  contactPhone String?
+  imageUrl     String?
+  isVerified   Boolean         @default(true)
+  isDemo       Boolean         @default(true)
+  createdAt    DateTime        @default(now())
+
+  inquiries    VendorInquiry[]
+}
+
+model VendorInquiry {
+  id         String   @id @default(uuid())
+  eventId    String
+  event      Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  vendorId   String
+  vendor     Vendor   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message    String
+  dateNeeded DateTime
+  budget     Float    @default(0)
+  status     String   @default("pending") // pending, replied, booked, declined
+  createdAt  DateTime @default(now())
+}
+
+model Budget {
+  id              String           @id @default(uuid())
+  eventId         String           @unique
+  event           Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  totalBudget     Float            @default(0)
+  allocatedBudget Float            @default(0)
+  currency        String           @default("USD")
+  notes           String?
+  updatedAt       DateTime         @updatedAt
+
+  categories      BudgetCategory[]
+}
+
+model BudgetCategory {
+  id              String   @id @default(uuid())
+  budgetId        String
+  budget          Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  name            String
+  allocatedAmount Float    @default(0)
+  color           String   @default("#8B5CF6")
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  eventId     String
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  title       String
+  amount      Float
+  category    String   // Venue, Catering, Decor, Photography, Entertainment, Logistics, Marketing, Other
+  paidBy      String   @default("Organizer")
+  status      String   @default("paid") // pending, paid, cancelled
+  receiptUrl  String?
+  date        DateTime @default(now())
+  notes       String?
+  createdAt   DateTime @default(now())
+}
+
+model Task {
+  id          String        @id @default(uuid())
+  eventId     String
+  event       Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  assignedTo  String?
+  dueDate     DateTime?
+  priority    String        @default("medium") // low, medium, high, urgent
+  status      String        @default("todo") // todo, in_progress, completed
+  category    String        @default("General")
+  order       Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  comments    TaskComment[]
+}
+
+model TaskComment {
+  id         String   @id @default(uuid())
+  taskId     String
+  task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId     String
+  authorName String
+  comment    String
+  createdAt  DateTime @default(now())
+}
+
+model Moodboard {
+  id           String          @id @default(uuid())
+  eventId      String
+  event        Event           @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  title        String
+  theme        String
+  colorPalette String          @default("[]") // JSON array of hex codes
+  notes        String?
+  createdAt    DateTime        @default(now())
+
+  items        MoodboardItem[]
+}
+
+model MoodboardItem {
+  id          String    @id @default(uuid())
+  moodboardId String
+  moodboard   Moodboard @relation(fields: [moodboardId], references: [id], onDelete: Cascade)
+  title       String
+  imageUrl    String
+  category    String    // Decor, Floral, Lighting, Attire, Cake, Favors
+  notes       String?
+  createdAt   DateTime  @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   @default("system") // task, rsvp, budget, system, collaborator
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  eventId   String?
+  event     Event?   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String
+  details   String?
+  createdAt DateTime @default(now())
+}

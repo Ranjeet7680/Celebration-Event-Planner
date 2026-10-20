@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" width="100%" height="100%">
+  <defs>
+    <linearGradient id="archBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080C18" />
+      <stop offset="50%" stop-color="#0B1020" />
+      <stop offset="100%" stop-color="#11182B" />
+    </linearGradient>
+
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#171F35" />
+      <stop offset="100%" stop-color="#131B30" />
+    </linearGradient>
+
+    <linearGradient id="violetGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#6366F1" />
+    </linearGradient>
+
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+
+    <style>
+      .pulse-line {
+        animation: pulseArch 3s ease-in-out infinite;
+      }
+      .signal-dot {
+        animation: moveSignal 4s linear infinite;
+      }
+      @keyframes pulseArch {
+        0%, 100% { opacity: 0.4; }
+        50% { opacity: 0.9; }
+      }
+      @keyframes moveSignal {
+        0% { transform: translateY(0px); opacity: 0; }
+        15% { opacity: 1; }
+        85% { opacity: 1; }
+        100% { transform: translateY(180px); opacity: 0; }
+      }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="520" rx="20" fill="url(#archBg)" stroke="rgba(255,255,255,0.08)" stroke-width="2" />
+
+  <!-- Diagram Title -->
+  <g transform="translate(50, 45)">
+    <rect x="0" y="0" width="180" height="24" rx="12" fill="rgba(99,102,241,0.18)" stroke="rgba(99,102,241,0.4)" stroke-width="1" />
+    <text x="12" y="16" fill="#A5B4FC" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="700">DIAGRAM 2 : SYSTEM ARCHITECTURE</text>
+    <text x="0" y="50" fill="#F8FAFC" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22" font-weight="800">PromptWars Full-Stack Architectural Topology</text>
+  </g>
+
+  <!-- Layer 1: Client Application Layer -->
+  <g transform="translate(50, 120)">
+    <rect width="900" height="95" rx="16" fill="url(#cardBg)" stroke="rgba(139,92,246,0.3)" stroke-width="1.2" filter="url(#softShadow)" />
+    <!-- Label -->
+    <rect x="15" y="12" width="180" height="20" rx="6" fill="rgba(139,92,246,0.2)" />
+    <text x="25" y="26" fill="#C4B5FD" font-family="sans-serif" font-size="11" font-weight="700">PRESENTATION LAYER</text>
+
+    <!-- Components Pills -->
+    <g transform="translate(15, 42)" font-family="sans-serif" font-size="11">
+      <rect x="0" y="0" width="165" height="38" rx="10" fill="#0B1020" stroke="rgba(255,255,255,0.08)" />
+      <text x="12" y="18" fill="#F8FAFC" font-weight="700">Next.js 16 App Router</text>
+      <text x="12" y="31" fill="#94A3B8" font-size="10">React 19 &bull; Turbopack</text>
+
+      <rect x="175" y="0" width="165" height="38" rx="10" fill="#0B1020" stroke="rgba(255,255,255,0.08)" />
+      <text x="187" y="18" fill="#F8FAFC" font-weight="700">Tailwind CSS v4</text>
+      <text x="187" y="31" fill="#94A3B8" font-size="10">Glassmorphism &bull; Glows</text>
+
+      <rect x="350" y="0" width="170" height="38" rx="10" fill="#0B1020" stroke="rgba(255,255,255,0.08)" />
+      <text x="362" y="18" fill="#F8FAFC" font-weight="700">Recharts Visuals</text>
+      <text x="362" y="31" fill="#94A3B8" font-size="10">Budget &bull; RSVP Analytics</text>
+
+      <rect x="530" y="0" width="170" height="38" rx="10" fill="#0B1020" stroke="rgba(255,255,255,0.08)" />
+      <text x="542" y="18" fill="#F8FAFC" font-weight="700">20 Page Shell</text>
+      <text x="542" y="31" fill="#94A3B8" font-size="10">Global Search &bull; Context</text>
+
+      <rect x="710" y="0" width="160" height="38" rx="10" fill="#0B1020" stroke="rgba(255,255,255,0.08)" />
+      <text x="722" y="18" fill="#F5C76B" font-weight="700">Kanban &amp; Designer</text>
+      <text x="722" y="31" fill="#94A3B8" font-size="10">Live Drag &bull; Print Studio</text>
+    </g>
+  </g>
+
+  <!-- Animated Connectors between Layer 1 and 2 -->
+  <line x1="250" y1="215" x2="250" y2="245" stroke="#8B5CF6" stroke-width="2" stroke-dasharray="4 3" class="pulse-line" />
+  <line x1="500" y1="215" x2="500" y2="245" stroke="#6366F1" stroke-width="2" stroke-dasharray="4 3" class="pulse-line" />
+  <line x1="750" y1="215" x2="750" y2="245" stroke="#F5C76B" stroke-width="2" stroke-dasharray="4 3" class="pulse-line" />
+
+  <!-- Layer 2: API & Business Logic Layer -->
+  <g transform="translate(50, 245)">
+    <rect width="900" height="95" rx="16" fill="url(#cardBg)" stroke="rgba(99,102,241,0.35)" stroke-width="1.2" filter="url(#softShadow)" />
+    <!-- Label -->
+    <rect x="15" y="12" width="220" height="20" rx="6" fill="rgba(99,102,241,0.2)" />
+    <text x="25" y="26" fill="#A5B4FC" font-family="sans-serif" font-size="11" font-weight="700">API &amp; BUSINESS LOGIC BOUNDARY</text>
+
+    <!-- Components Pills -->
+    <g transform="translate(15, 42)" font-family="sans-serif" font-size="11">
+      <rect x="0" y="0" width="210" height="38" rx="10" fill="#0B1020" stroke="rgba(255,255,255,0.08)" />
+      <text x="12" y="18" fill="#F8FAFC" font-weight="700">17 Next.js Route Handlers</text>
+      <text x="12" y="31" fill="#94A3B8" font-size="10">Events, Guests, Expenses, Tasks</text>
+
+      <rect x="220" y="0" width="210" height="38" rx="10" fill="#0B1020" stroke="rgba(255,255,255,0.08)" />
+      <text x="232" y="18" fill="#F8FAFC" font-weight="700">Auth &amp; Session Guard</text>
+      <text x="232" y="31" fill="#94A3B8" font-size="10">Bcrypt &bull; HTTP-only Cookies</text>
+
+      <rect x="440" y="0" width="210" height="38" rx="10" fill="#0B1020" stroke="rgba(255,255,255,0.08)" />
+      <text x="452" y="18" fill="#F8FAFC" font-weight="700">AI Provider Adapter</text>
+      <text x="452" y="31" fill="#94A3B8" font-size="10">Gemini &bull; OpenAI &bull; Local Demo</text>
+
+      <rect x="660" y="0" width="210" height="38" rx="10" fill="#0B1020" stroke="rgba(255,255,255,0.08)" />
+      <text x="672" y="18" fill="#34D399" font-weight="700">Zod Schema Validation</text>
+      <text x="672" y="31" fill="#94A3B8" font-size="10">FullEventPlanSchema Guard</text>
+    </g>
+  </g>
+
+  <!-- Animated Connectors between Layer 2 and 3 -->
+  <line x1="250" y1="340" x2="250" y2="370" stroke="#6366F1" stroke-width="2" stroke-dasharray="4 3" class="pulse-line" />
+  <line x1="500" y1="340" x2="500" y2="370" stroke="#8B5CF6" stroke-width="2" stroke-dasharray="4 3" class="pulse-line" />
+  <line x1="750" y1="340" x2="750" y2="370" stroke="#34D399" stroke-width="2" stroke-dasharray="4 3" class="pulse-line" />
+
+  <!-- Layer 3: Persistence & Database Layer -->
+  <g transform="translate(50, 370)">
+    <rect width="900" height="105" rx="16" fill="url(#cardBg)" stroke="rgba(52,211,153,0.3)" stroke-width="1.2" filter="url(#softShadow)" />
+    <!-- Label -->
+    <rect x="15" y="12" width="230" height="20" rx="6" fill="rgba(52,211,153,0.18)" />
+    <text x="25" y="26" fill="#6EE7B7" font-family="sans-serif" font-size="11" font-weight="700">PERSISTENCE &amp; DATABASE LAYER</text>
+
+    <!-- Components Pills -->
+    <g transform="translate(15, 42)" font-family="sans-serif" font-size="11">
+      <rect x="0" y="0" width="275" height="48" rx="10" fill="#0B1020" stroke="rgba(255,255,255,0.08)" />
+      <text x="14" y="20" fill="#F8FAFC" font-weight="700">Prisma ORM 6.4</text>
+      <text x="14" y="36" fill="#94A3B8" font-size="10.5">Type-safe queries &bull; Relational migrations</text>
+
+      <rect x="290" y="0" width="295" height="48" rx="10" fill="#0B1020" stroke="rgba(255,255,255,0.08)" />
+      <text x="304" y="20" fill="#F8FAFC" font-weight="700">SQLite (Local Zero-Config) / Postgres</text>
+      <text x="304" y="36" fill="#94A3B8" font-size="10.5">dev.db zero-setup &bull; Supabase/Neon deployable</text>
+
+      <rect x="600" y="0" width="270" height="48" rx="10" fill="#0B1020" stroke="rgba(255,255,255,0.08)" />
+      <text x="614" y="20" fill="#F5C76B" font-weight="700">12 Relational Entities</text>
+      <text x="614" y="36" fill="#94A3B8" font-size="10.5">User, Event, Guest, Budget, Task, Venue, etc.</text>
+    </g>
+  </g>
+</svg>
