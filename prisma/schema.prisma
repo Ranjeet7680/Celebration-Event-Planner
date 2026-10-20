@@ -71,6 +71,11 @@ model Event {
   activityLogs    ActivityLog[]
   vendorInquiries VendorInquiry[]
   budgetSummary   Budget?
+
+  @@index([userId])
+  @@index([status])
+  @@index([eventDate])
+  @@index([category])
 }
 
 model EventCollaborator {
@@ -84,6 +89,9 @@ model EventCollaborator {
   role      String   @default("editor") // owner, admin, editor, viewer
   status    String   @default("active") // pending, active
   createdAt DateTime @default(now())
+
+  @@index([eventId])
+  @@index([userId])
 }
 
 model EventTemplate {
@@ -99,6 +107,9 @@ model EventTemplate {
   isFavorite      Boolean  @default(false)
   planData        String   // JSON string of full pre-baked plan
   createdAt       DateTime @default(now())
+
+  @@index([category])
+  @@index([isFavorite])
 }
 
 model EventPlan {
@@ -112,6 +123,8 @@ model EventPlan {
   isDemoMode      Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  @@index([eventId])
 }
 
 model Guest {
@@ -129,6 +142,10 @@ model Guest {
   notes               String?
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
+
+  @@index([eventId])
+  @@index([rsvpStatus])
+  @@index([group])
 }
 
 model Invitation {
@@ -146,6 +163,8 @@ model Invitation {
   isPublished  Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  @@index([eventId])
 }
 
 model Venue {
@@ -166,6 +185,9 @@ model Venue {
   createdAt    DateTime        @default(now())
 
   favorites    VenueFavorite[]
+
+  @@index([location])
+  @@index([capacity])
 }
 
 model VenueFavorite {
@@ -177,6 +199,8 @@ model VenueFavorite {
   createdAt DateTime @default(now())
 
   @@unique([userId, venueId])
+  @@index([userId])
+  @@index([venueId])
 }
 
 model Vendor {
@@ -196,6 +220,9 @@ model Vendor {
   createdAt    DateTime        @default(now())
 
   inquiries    VendorInquiry[]
+
+  @@index([category])
+  @@index([location])
 }
 
 model VendorInquiry {
@@ -211,6 +238,10 @@ model VendorInquiry {
   budget     Float    @default(0)
   status     String   @default("pending") // pending, replied, booked, declined
   createdAt  DateTime @default(now())
+
+  @@index([eventId])
+  @@index([vendorId])
+  @@index([userId])
 }
 
 model Budget {
@@ -224,6 +255,8 @@ model Budget {
   updatedAt       DateTime         @updatedAt
 
   categories      BudgetCategory[]
+
+  @@index([eventId])
 }
 
 model BudgetCategory {
@@ -233,6 +266,8 @@ model BudgetCategory {
   name            String
   allocatedAmount Float    @default(0)
   color           String   @default("#8B5CF6")
+
+  @@index([budgetId])
 }
 
 model Expense {
@@ -248,6 +283,10 @@ model Expense {
   date        DateTime @default(now())
   notes       String?
   createdAt   DateTime @default(now())
+
+  @@index([eventId])
+  @@index([category])
+  @@index([status])
 }
 
 model Task {
@@ -266,6 +305,10 @@ model Task {
   updatedAt   DateTime      @updatedAt
 
   comments    TaskComment[]
+
+  @@index([eventId])
+  @@index([status])
+  @@index([priority])
 }
 
 model TaskComment {
@@ -276,6 +319,8 @@ model TaskComment {
   authorName String
   comment    String
   createdAt  DateTime @default(now())
+
+  @@index([taskId])
 }
 
 model Moodboard {
@@ -289,6 +334,8 @@ model Moodboard {
   createdAt    DateTime        @default(now())
 
   items        MoodboardItem[]
+
+  @@index([eventId])
 }
 
 model MoodboardItem {
@@ -300,6 +347,8 @@ model MoodboardItem {
   category    String    // Decor, Floral, Lighting, Attire, Cake, Favors
   notes       String?
   createdAt   DateTime  @default(now())
+
+  @@index([moodboardId])
 }
 
 model Notification {
@@ -312,6 +361,9 @@ model Notification {
   link      String?
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([userId, isRead])
 }
 
 model ActivityLog {
@@ -323,4 +375,7 @@ model ActivityLog {
   action    String
   details   String?
   createdAt DateTime @default(now())
+
+  @@index([eventId])
+  @@index([userId])
 }

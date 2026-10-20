@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { sanitizePlainString } from "@/lib/sanitize";
 
 
 export async function GET(
@@ -49,7 +50,8 @@ export async function POST(
     const { title, amount, category, paidBy, status, notes, date } = body;
 
     const parsedAmount = Number(amount);
-    if (!title || isNaN(parsedAmount) || parsedAmount <= 0) {
+    const cleanTitle = sanitizePlainString(title);
+    if (!cleanTitle || isNaN(parsedAmount) || parsedAmount <= 0) {
       return NextResponse.json(
         { error: "A valid title and positive expense amount are required" },
         { status: 400 }
@@ -59,12 +61,12 @@ export async function POST(
     const expense = await prisma.expense.create({
       data: {
         eventId: id,
-        title: title.trim(),
+        title: cleanTitle,
         amount: parsedAmount,
         category: category || "Other",
-        paidBy: paidBy || user.name,
+        paidBy: paidBy ? sanitizePlainString(paidBy) : user.name,
         status: status || "paid",
-        notes: notes || null,
+        notes: notes ? sanitizePlainString(notes) : null,
         date: date ? new Date(date) : new Date(),
       },
     });

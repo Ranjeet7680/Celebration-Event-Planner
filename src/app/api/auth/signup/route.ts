@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, createSession } from "@/lib/auth";
+import { checkRateLimit } from "@/lib/rate-limit";
+import { sanitizePlainString } from "@/lib/sanitize";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: Request) {
   try {
-    const { name, email, password } = await request.json();
+    const body = await request.json().catch(() => ({}));
+    const { name, email, password } = body;
 
     if (!name || !email || !password) {
       return NextResponse.json(
@@ -13,15 +18,41 @@ export async function POST(request: Request) {
       );
     }
 
-    if (password.length < 8) {
+    const cleanName = sanitizePlainString(name);
+    const cleanEmail = String(email).toLowerCase().trim();
+
+    if (cleanName.length < 2) {
+      return NextResponse.json(
+        { error: "Name must be at least 2 characters long" },
+        { status: 400 }
+      );
+    }
+
+    if (!EMAIL_REGEX.test(cleanEmail)) {
+      return NextResponse.json(
+        { error: "Please provide a valid email address" },
+        { status: 400 }
+      );
+    }
+
+    if (typeof password !== "string" || password.length < 8) {
       return NextResponse.json(
         { error: "Password must be at least 8 characters long" },
         { status: 400 }
       );
     }
 
+    // Rate limit signup attempts: max 5 per minute
+    const rateLimit = checkRateLimit(`signup:${cleanEmail}`, 5, 60000);
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: "Too many registration attempts. Please try again shortly." },
+        { status: 429 }
+      );
+    }
+
     const existing = await prisma.user.findUnique({
-      where: { email: email.toLowerCase().trim() },
+      where: { email: cleanEmail },
     });
 
     if (existing) {
@@ -34,8 +65,8 @@ export async function POST(request: Request) {
     const passwordHash = await hashPassword(password);
     const user = await prisma.user.create({
       data: {
-        name,
-        email: email.toLowerCase().trim(),
+        name: cleanName,
+        email: cleanEmail,
         passwordHash,
         preferences: {
           create: {
@@ -55,14 +86,14 @@ export async function POST(request: Request) {
         id: user.id,
         email: user.email,
         name: user.name,
+        role: user.role,
       },
     });
   } catch (error) {
     console.error("Signup error:", error);
     return NextResponse.json(
-      { error: "Failed to create account" },
+      { error: "An unexpected error occurred during account creation" },
       { status: 500 }
     );
   }
 }
-

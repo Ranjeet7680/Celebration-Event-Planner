@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-
+import { sanitizePlainString } from "@/lib/sanitize";
 
 export async function GET(
   request: Request,
@@ -26,10 +26,17 @@ export async function GET(
     const todo = tasks.filter((t) => t.status === "todo").length;
     const progressPercent = total > 0 ? Math.round((completed / total) * 100) : 0;
 
-    return NextResponse.json({
-      tasks,
-      metrics: { total, completed, inProgress, todo, progressPercent },
-    });
+    return NextResponse.json(
+      {
+        tasks,
+        metrics: { total, completed, inProgress, todo, progressPercent },
+      },
+      {
+        headers: {
+          "Cache-Control": "private, no-cache",
+        },
+      }
+    );
   } catch (error) {
     console.error("Fetch tasks error:", error);
     return NextResponse.json(
@@ -50,23 +57,28 @@ export async function POST(
     }
 
     const { id } = await params;
-    const body = await request.json();
+    const body = await request.json().catch(() => ({}));
     const { title, description, assignedTo, dueDate, priority, status, category } = body;
 
-    if (!title || title.trim() === "") {
-      return NextResponse.json({ error: "Task title is required" }, { status: 400 });
+    const cleanTitle = sanitizePlainString(title);
+    if (!cleanTitle || cleanTitle.length < 2) {
+      return NextResponse.json({ error: "Task title is required (minimum 2 characters)" }, { status: 400 });
     }
+
+    const cleanDesc = description ? sanitizePlainString(description) : null;
+    const cleanAssignee = assignedTo ? sanitizePlainString(assignedTo) : user.name;
+    const cleanCategory = category ? sanitizePlainString(category) : "General";
 
     const task = await prisma.task.create({
       data: {
         eventId: id,
-        title: title.trim(),
-        description: description || null,
-        assignedTo: assignedTo || user.name,
+        title: cleanTitle,
+        description: cleanDesc,
+        assignedTo: cleanAssignee,
         dueDate: dueDate ? new Date(dueDate) : null,
         priority: priority || "medium",
         status: status || "todo",
-        category: category || "General",
+        category: cleanCategory,
       },
     });
 

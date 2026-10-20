@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-
+import { sanitizePlainString } from "@/lib/sanitize";
 
 export async function GET(
   request: Request,
@@ -19,7 +19,14 @@ export async function GET(
       orderBy: { name: "asc" },
     });
 
-    return NextResponse.json({ guests });
+    return NextResponse.json(
+      { guests, count: guests.length },
+      {
+        headers: {
+          "Cache-Control": "private, no-cache",
+        },
+      }
+    );
   } catch (error) {
     console.error("Fetch guests error:", error);
     return NextResponse.json(
@@ -40,25 +47,33 @@ export async function POST(
     }
 
     const { id } = await params;
-    const body = await request.json();
+    const body = await request.json().catch(() => ({}));
     const { name, email, phone, group, rsvpStatus, dietaryRestrictions, plusOne, notes } = body;
 
-    if (!name || name.trim() === "") {
-      return NextResponse.json({ error: "Guest name is required" }, { status: 400 });
+    const cleanName = sanitizePlainString(name);
+    if (!cleanName || cleanName.length < 2) {
+      return NextResponse.json({ error: "Guest name is required (minimum 2 characters)" }, { status: 400 });
     }
+
+    const cleanEmail = email ? String(email).trim().toLowerCase() : null;
+    const cleanPhone = phone ? sanitizePlainString(phone) : null;
+    const cleanGroup = group ? sanitizePlainString(group) : "Friends";
+    const cleanDietary = dietaryRestrictions ? sanitizePlainString(dietaryRestrictions) : null;
+    const cleanNotes = notes ? sanitizePlainString(notes) : null;
+    const cleanPlusOne = Math.max(0, Math.min(10, Number(plusOne) || 0));
 
     const guest = await prisma.guest.create({
       data: {
         eventId: id,
-        name: name.trim(),
-        email: email?.trim() || null,
-        phone: phone?.trim() || null,
-        group: group || "Friends",
+        name: cleanName,
+        email: cleanEmail,
+        phone: cleanPhone,
+        group: cleanGroup,
         rsvpStatus: rsvpStatus || "pending",
         invitationStatus: "sent",
-        dietaryRestrictions: dietaryRestrictions || null,
-        plusOne: Number(plusOne) || 0,
-        notes: notes || null,
+        dietaryRestrictions: cleanDietary,
+        plusOne: cleanPlusOne,
+        notes: cleanNotes,
       },
     });
 

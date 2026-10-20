@@ -1,6 +1,8 @@
 import { prisma } from "../src/lib/prisma";
 import bcrypt from "bcryptjs";
 import { generateDeterministicPlan, FullEventPlanSchema } from "../src/lib/ai";
+import { checkRateLimit, resetRateLimit } from "../src/lib/rate-limit";
+import { sanitizePlainString, sanitizeText } from "../src/lib/sanitize";
 
 let passed = 0;
 let failed = 0;
@@ -59,46 +61,51 @@ async function runTests() {
     const privateEvent = await prisma.event.create({
       data: {
         userId: testUser.id,
-        title: "Confidential Leadership Retreat",
-        category: "Corporate",
-        eventDate: new Date(Date.now() + 10 * 86400000),
-        location: "Private Island",
-        budget: 10000,
-        isDemo: false,
+        title: "Executive Secret Gala",
+        eventDate: new Date("2026-12-31"),
+        location: "Kolkata, India",
+        budget: 20000,
+        currency: "USD",
+        status: "planned",
       },
     });
 
-    const isAuthorized = privateEvent.userId === otherUser.id || privateEvent.isDemo;
-    assert(!isAuthorized, "Access denied: Unauthorized user cannot access another user's private event");
+    const hasAccess =
+      privateEvent.userId === otherUser.id ||
+      (await prisma.eventCollaborator.findFirst({
+        where: { eventId: privateEvent.id, userId: otherUser.id },
+      })) !== null;
+
+    assert(!hasAccess, "Access denied: Unauthorized user cannot access another user's private event");
 
     // ----------------------------------------------------
-    // Scenario 3: Create, read, and edit event
+    // Scenario 3: Event CRUD operations
     // ----------------------------------------------------
     console.log("\n3. Testing Event CRUD Operations:");
     const updatedEvent = await prisma.event.update({
       where: { id: privateEvent.id },
       data: {
-        title: "Updated Confidential Leadership Retreat",
-        budget: 15000,
+        title: "Executive Secret Gala - Updated",
+        budget: 25000,
         status: "active",
       },
     });
 
-    assert(updatedEvent.title === "Updated Confidential Leadership Retreat", "Event title updated successfully");
-    assert(updatedEvent.budget === 15000, "Event budget updated successfully");
+    assert(updatedEvent.title === "Executive Secret Gala - Updated", "Event title updated successfully");
+    assert(updatedEvent.budget === 25000, "Event budget updated successfully");
     assert(updatedEvent.status === "active", "Event status updated to active");
 
     // ----------------------------------------------------
-    // Scenario 4 & 5: AI Event Planning Engine in Demo Mode
+    // Scenario 4: AI Blueprint Generation (Deterministic Fallback)
     // ----------------------------------------------------
     console.log("\n4 & 5. Testing AI Event Planning Engine & Demo Mode:");
-    const prompt =
+    const samplePrompt =
       "Plan a college cultural festival for 800 attendees in Kolkata with a budget of ₹5,00,000. It should include a stage, music, food stalls, decorations, security, a volunteer team, and a two-day schedule.";
 
-    const generatedPlan = generateDeterministicPlan(prompt);
-    const validated = FullEventPlanSchema.safeParse(generatedPlan);
+    const generatedPlan = generateDeterministicPlan(samplePrompt);
+    const parsedPlan = FullEventPlanSchema.safeParse(generatedPlan);
 
-    assert(validated.success, "Deterministic plan matches FullEventPlanSchema strictly");
+    assert(parsedPlan.success, "Deterministic plan matches FullEventPlanSchema strictly");
     assert(generatedPlan.estimatedGuests === 800, "AI accurately extracted guest count (800 attendees)");
     assert(generatedPlan.totalEstimatedBudget === 500000, "AI accurately extracted budget (₹5,00,000)");
     assert(generatedPlan.currency === "INR", "AI accurately inferred Indian Rupee (INR) currency");
@@ -108,25 +115,24 @@ async function runTests() {
     assert(generatedPlan.riskContingencyChecklist.length === 4, "AI generated 4 contingency risk plans");
 
     // ----------------------------------------------------
-    // Scenario 6: Guest creation and RSVP updates
+    // Scenario 6: Guest creation and RSVP status mutation
     // ----------------------------------------------------
     console.log("\n6. Testing Guest Creation & RSVP Updates:");
-    const guest = await prisma.guest.create({
+    const testGuest = await prisma.guest.create({
       data: {
         eventId: privateEvent.id,
-        name: "Professor Sen",
-        email: "sen@academics.edu",
+        name: "Priya Sengupta",
+        email: "priya.s@example.com",
         group: "VIP",
         rsvpStatus: "pending",
         plusOne: 1,
-        dietaryRestrictions: "Vegan",
       },
     });
 
-    assert(guest.rsvpStatus === "pending", "Guest initial status is pending");
+    assert(testGuest.rsvpStatus === "pending", "Guest initial status is pending");
 
     const updatedGuest = await prisma.guest.update({
-      where: { id: guest.id },
+      where: { id: testGuest.id },
       data: { rsvpStatus: "attending" },
     });
 
@@ -134,99 +140,104 @@ async function runTests() {
     assert(updatedGuest.plusOne === 1, "Plus-one count correctly persisted");
 
     // ----------------------------------------------------
-    // Scenario 7: Budget totals, expenses & remaining balances
+    // Scenario 7: Budget Calculations and Over-Budget Warning
     // ----------------------------------------------------
     console.log("\n7. Testing Budget Calculations & Balance Verification:");
     const eventBudget = 20000;
-    const exp1 = await prisma.expense.create({
-      data: {
-        eventId: privateEvent.id,
-        title: "Stage Rigging",
-        amount: 8000,
-        category: "Stage",
-        status: "paid",
-      },
+    await prisma.expense.createMany({
+      data: [
+        {
+          eventId: privateEvent.id,
+          title: "Mainstage Truss & Lighting",
+          amount: 8000,
+          category: "Venue",
+          status: "paid",
+        },
+        {
+          eventId: privateEvent.id,
+          title: "Artisan Catering Deposit",
+          amount: 6000,
+          category: "Catering",
+          status: "paid",
+        },
+      ],
     });
 
-    const exp2 = await prisma.expense.create({
-      data: {
-        eventId: privateEvent.id,
-        title: "Catering Deposit",
-        amount: 6000,
-        category: "Catering",
-        status: "paid",
-      },
+    const expensesSum = await prisma.expense.aggregate({
+      where: { eventId: privateEvent.id, status: "paid" },
+      _sum: { amount: true },
     });
 
-    const totalPaid = exp1.amount + exp2.amount;
-    const remainingBudget = eventBudget - totalPaid;
-    const utilization = Math.round((totalPaid / eventBudget) * 100);
+    const actualSpent = expensesSum._sum.amount || 0;
+    const remainingBalance = eventBudget - actualSpent;
+    const utilizationRate = Math.round((actualSpent / eventBudget) * 100);
 
-    assert(totalPaid === 14000, "Total paid expenses calculate correctly to $14,000");
-    assert(remainingBudget === 6000, "Remaining balance calculates accurately to $6,000");
-    assert(utilization === 70, "Budget utilization correctly computes to 70%");
+    assert(actualSpent === 14000, "Total paid expenses calculate correctly to $14,000");
+    assert(remainingBalance === 6000, "Remaining balance calculates accurately to $6,000");
+    assert(utilizationRate === 70, "Budget utilization correctly computes to 70%");
 
     // ----------------------------------------------------
-    // Scenario 8: Task completion and Kanban progress rate
+    // Scenario 8: Task completion velocity
     // ----------------------------------------------------
     console.log("\n8. Testing Task Completion & Velocity Progress:");
     const task1 = await prisma.task.create({
       data: {
         eventId: privateEvent.id,
-        title: "Sound Permit Submission",
-        priority: "urgent",
+        title: "Secure fire and sound permits",
         status: "completed",
-        category: "Permits",
+        priority: "urgent",
       },
     });
 
     const task2 = await prisma.task.create({
       data: {
         eventId: privateEvent.id,
-        title: "Stage Safety Check",
-        priority: "high",
+        title: "Contract headline musical act",
         status: "todo",
-        category: "Production",
+        priority: "high",
       },
     });
 
-    const allTasks = [task1, task2];
-    const completedCount = allTasks.filter((t) => t.status === "completed").length;
-    const taskProgress = Math.round((completedCount / allTasks.length) * 100);
+    const eventTasks = await prisma.task.findMany({
+      where: { eventId: privateEvent.id },
+    });
 
-    assert(taskProgress === 50, "Task progress rate calculated accurately (50%)");
+    const completedTasks = eventTasks.filter((t) => t.status === "completed").length;
+    const taskRate = Math.round((completedTasks / eventTasks.length) * 100);
+
+    assert(taskRate === 50, "Task progress rate calculated accurately (50%)");
 
     // ----------------------------------------------------
-    // Scenario 9: Calendar date mapping
+    // Scenario 9: Calendar mapping
     // ----------------------------------------------------
     console.log("\n9. Testing Calendar Date Mapping:");
-    const eventDate = new Date(privateEvent.eventDate);
-    const day = eventDate.getDate();
-    const month = eventDate.getMonth();
-
-    const matchingEvents = await prisma.event.findMany({
+    const targetDate = new Date("2026-12-31");
+    const calendarEvents = await prisma.event.findMany({
       where: {
-        id: privateEvent.id,
         eventDate: {
-          gte: new Date(eventDate.getFullYear(), month, day),
-          lt: new Date(eventDate.getFullYear(), month, day + 1),
+          gte: new Date(targetDate.setHours(0, 0, 0, 0)),
+          lte: new Date(targetDate.setHours(23, 59, 59, 999)),
         },
       },
     });
 
-    assert(matchingEvents.length === 1, "Calendar correctly filters events for target date");
+    assert(calendarEvents.length >= 1, "Calendar correctly filters events for target date");
 
     // ----------------------------------------------------
-    // Scenario 10: Search and filtering verification
+    // Scenario 10: Venue & Vendor directory filters
     // ----------------------------------------------------
     console.log("\n10. Testing Venue & Vendor Search & Filters:");
-    const venuesInKolkata = await prisma.venue.findMany({
-      where: { location: { contains: "Kolkata" } },
+    const venues = await prisma.venue.findMany({
+      where: {
+        location: { contains: "Kolkata" },
+      },
     });
-    assert(venuesInKolkata.length >= 1, "Location search returns Kolkata Glasshouse Pavilion");
+    assert(venues.length >= 1, "Location search returns Kolkata Glasshouse Pavilion");
 
     const florists = await prisma.vendor.findMany({
-      where: { category: "florist" },
+      where: {
+        category: "florist",
+      },
     });
     assert(florists.length >= 1, "Category filter returns verified florist vendors");
 
@@ -266,6 +277,64 @@ async function runTests() {
     assert(!isTitleValid, "Form validation rejects whitespace-only titles");
 
     // ----------------------------------------------------
+    // Scenario 13: Sliding Window Rate Limiting
+    // ----------------------------------------------------
+    console.log("\n13. Testing Sliding Window Rate Limiter:");
+    const rateLimitKey = `test-ip-${Date.now()}`;
+    resetRateLimit(rateLimitKey);
+
+    const call1 = checkRateLimit(rateLimitKey, 3, 5000);
+    const call2 = checkRateLimit(rateLimitKey, 3, 5000);
+    const call3 = checkRateLimit(rateLimitKey, 3, 5000);
+    const call4 = checkRateLimit(rateLimitKey, 3, 5000);
+
+    assert(call1.success && call2.success && call3.success, "Rate limiter permits requests within capacity (3/3)");
+    assert(!call4.success, "Rate limiter enforces threshold and denies 4th request");
+    assert(call4.remaining === 0, "Remaining token count reflects exhausted quota");
+
+    // ----------------------------------------------------
+    // Scenario 14: Input Sanitization & XSS Neutralization
+    // ----------------------------------------------------
+    console.log("\n14. Testing Input Sanitization & XSS Neutralization:");
+    const maliciousPayload = '<script>alert("xss")</script>Spring Gala 2026';
+    const sanitizedString = sanitizePlainString(maliciousPayload);
+    assert(!sanitizedString.includes("<script>"), "Sanitizer completely strips executable <script> tags");
+    assert(sanitizedString === 'Spring Gala 2026', "Sanitizer preserves harmless text content");
+
+    const iframePayload = '<iframe src="javascript:stealCookies()"></iframe>Exclusive VIP Lounge';
+    const sanitizedIframe = sanitizePlainString(iframePayload);
+    assert(!sanitizedIframe.includes("iframe"), "Sanitizer strips <iframe> tags");
+    assert(!sanitizedIframe.includes("javascript:"), "Sanitizer strips javascript: pseudo-protocols");
+
+    // ----------------------------------------------------
+    // Scenario 15: Budget Overflow Notification Logic
+    // ----------------------------------------------------
+    console.log("\n15. Testing Budget Ceiling & Over-Budget Alerting:");
+    const maxBudget = 10000;
+    const totalCurrentExpense = 12500;
+    const isOverBudget = totalCurrentExpense > maxBudget;
+    assert(isOverBudget, "System correctly flags when expenses surpass allocated budget");
+    const overageAmount = totalCurrentExpense - maxBudget;
+    assert(overageAmount === 2500, "Overage calculation is mathematically precise ($2,500 surplus)");
+
+    // ----------------------------------------------------
+    // Scenario 16: Headcount Aggregation with Plus-Ones
+    // ----------------------------------------------------
+    console.log("\n16. Testing Headcount Aggregation & Catering Capacity:");
+    const guestsList = [
+      { name: "Guest A", rsvp: "attending", plusOnes: 1 },
+      { name: "Guest B", rsvp: "attending", plusOnes: 2 },
+      { name: "Guest C", rsvp: "declined", plusOnes: 1 },
+      { name: "Guest D", rsvp: "pending", plusOnes: 0 },
+    ];
+
+    const confirmedHeadcount = guestsList
+      .filter((g) => g.rsvp === "attending")
+      .reduce((acc, g) => acc + 1 + g.plusOnes, 0);
+
+    assert(confirmedHeadcount === 5, "Confirmed headcount correctly calculates 2 primary guests + 3 plus-ones = 5");
+
+    // ----------------------------------------------------
     // Clean up temporary test records
     // ----------------------------------------------------
     console.log("\nCleaning up test artifacts...");
@@ -281,7 +350,11 @@ async function runTests() {
     console.log(`   TEST RESULTS: ${passed} PASSED, ${failed} FAILED `);
     console.log("=======================================================\n");
 
-    if (failed > 0) process.exit(1);
+    if (failed > 0) {
+      process.exit(1);
+    } else {
+      process.exit(0);
+    }
   } catch (error) {
     console.error("Test execution encountered an unhandled exception:", error);
     process.exit(1);

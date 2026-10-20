@@ -14,7 +14,7 @@ A production-grade, AI-powered celebration and event planning platform built wit
   <img src="https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=for-the-badge&logo=tailwind-css" alt="Tailwind CSS v4" />
   <img src="https://img.shields.io/badge/Prisma-6.4.1-2D3748?style=for-the-badge&logo=prisma" alt="Prisma ORM" />
-  <img src="https://img.shields.io/badge/Tests-29%20Passed-34D399?style=for-the-badge" alt="Automated Tests" />
+  <img src="https://img.shields.io/badge/Tests-39%20Passed-34D399?style=for-the-badge" alt="Automated Tests" />
   <a href="https://github.com/Ranjeet7680/Celebration-Event-Planner/wiki"><img src="https://img.shields.io/badge/Documentation-Wiki-8B5CF6?style=for-the-badge&logo=gitbook" alt="GitHub Wiki" /></a>
 </p>
 

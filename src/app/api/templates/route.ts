@@ -32,7 +32,14 @@ export async function GET(request: Request) {
       tagsList: JSON.parse(t.tags || "[]"),
     }));
 
-    return NextResponse.json({ templates: formatted });
+    return NextResponse.json(
+      { templates: formatted, count: formatted.length },
+      {
+        headers: {
+          "Cache-Control": "public, max-age=60, stale-while-revalidate=120",
+        },
+      }
+    );
   } catch (error) {
     console.error("Fetch templates error:", error);
     return NextResponse.json(
