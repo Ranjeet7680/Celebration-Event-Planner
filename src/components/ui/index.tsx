@@ -110,21 +110,46 @@ export function Modal({
   description?: string;
   children: React.ReactNode;
 }) {
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
+  const titleId = "modal-title-" + title.toLowerCase().replace(/[^a-z0-9]/g, "-");
+  const descId = description ? titleId + "-desc" : undefined;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={titleId}
+      aria-describedby={descId}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
+    >
       <div className="bg-[#171F35] border border-slate-700 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl relative">
         <div className="p-6 border-b border-slate-800 flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-white">{title}</h3>
+            <h3 id={titleId} className="text-lg font-semibold text-white">
+              {title}
+            </h3>
             {description && (
-              <p className="text-xs text-slate-400 mt-1">{description}</p>
+              <p id={descId} className="text-xs text-slate-400 mt-1">
+                {description}
+              </p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
+            aria-label="Close dialog"
+            className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-violet-400 cursor-pointer"
           >
             ✕
           </button>

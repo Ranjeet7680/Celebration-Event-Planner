@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { logger } from "@/lib/logger";
 
 
 export async function GET() {
@@ -17,7 +18,7 @@ export async function GET() {
 
     return NextResponse.json({ user: fullUser });
   } catch (error) {
-    console.error("Fetch settings error:", error);
+    logger.error("Fetch settings error", error);
     return NextResponse.json(
       { error: "Failed to fetch settings" },
       { status: 500 }
@@ -58,7 +59,7 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json({ success: true, user: updatedUser });
   } catch (error) {
-    console.error("Update settings error:", error);
+    logger.error("Update settings error", error);
     return NextResponse.json(
       { error: "Failed to update settings" },
       { status: 500 }

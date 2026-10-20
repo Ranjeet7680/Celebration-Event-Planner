@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { FullEventPlanSchema, GeneratedEventPlan } from "@/lib/ai";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: Request) {
   try {
@@ -183,7 +184,7 @@ export async function POST(request: Request) {
       event: newEvent,
     });
   } catch (error) {
-    console.error("Save AI Plan Error:", error);
+    logger.error("Save AI Plan Error", error);
     return NextResponse.json(
       { error: "Failed to convert AI plan into event" },
       { status: 500 }

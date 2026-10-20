@@ -17,6 +17,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card, Modal } from "@/components/ui";
 import { useEvent } from "@/context/EventContext";
 import { useDebounce } from "@/hooks/useDebounce";
+import { logger } from "@/lib/logger";
 import type { VendorEntity } from "@/types";
 
 const categories = [
@@ -57,7 +58,7 @@ export default function VendorsPage() {
         setVendors(data.vendors || []);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to fetch vendors", e);
     } finally {
       setLoading(false);
     }
@@ -105,7 +106,7 @@ export default function VendorsPage() {
         }, 1800);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to fetch vendors", e);
     } finally {
       setSubmitting(false);
     }

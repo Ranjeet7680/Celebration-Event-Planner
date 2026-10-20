@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { useEvent } from "@/context/EventContext";
 import { Button, Badge } from "@/components/ui";
+import { logger } from "@/lib/logger";
 
 const navSections = [
   {
@@ -96,7 +97,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       await fetch("/api/auth/logout", { method: "POST" });
       router.push("/login");
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to log out", e);
     }
   };
 

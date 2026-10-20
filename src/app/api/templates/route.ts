@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { logger } from "@/lib/logger";
 
 
 export async function GET(request: Request) {
@@ -41,7 +42,7 @@ export async function GET(request: Request) {
       }
     );
   } catch (error) {
-    console.error("Fetch templates error:", error);
+    logger.error("Fetch templates error", error);
     return NextResponse.json(
       { error: "Failed to fetch templates" },
       { status: 500 }
@@ -136,7 +137,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, event }, { status: 201 });
   } catch (error) {
-    console.error("Create from template error:", error);
+    logger.error("Create from template error", error);
     return NextResponse.json(
       { error: "Failed to create event from template" },
       { status: 500 }

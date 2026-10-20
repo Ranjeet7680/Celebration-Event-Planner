@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { sanitizePlainString } from "@/lib/sanitize";
+import { logger } from "@/lib/logger";
 
 
 export async function GET(
@@ -27,7 +28,7 @@ export async function GET(
 
     return NextResponse.json({ expenses, budget });
   } catch (error) {
-    console.error("Fetch expenses error:", error);
+    logger.error("Fetch expenses error", error);
     return NextResponse.json(
       { error: "Failed to fetch expenses" },
       { status: 500 }
@@ -112,7 +113,7 @@ export async function POST(
       { status: 201 }
     );
   } catch (error) {
-    console.error("Create expense error:", error);
+    logger.error("Create expense error", error);
     return NextResponse.json(
       { error: "Failed to add expense" },
       { status: 500 }

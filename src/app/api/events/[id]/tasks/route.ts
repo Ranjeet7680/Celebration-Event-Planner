@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { sanitizePlainString } from "@/lib/sanitize";
+import { logger } from "@/lib/logger";
 
 export async function GET(
   request: Request,
@@ -38,7 +39,7 @@ export async function GET(
       }
     );
   } catch (error) {
-    console.error("Fetch tasks error:", error);
+    logger.error("Fetch tasks error", error);
     return NextResponse.json(
       { error: "Failed to fetch tasks" },
       { status: 500 }
@@ -93,7 +94,7 @@ export async function POST(
 
     return NextResponse.json({ success: true, task }, { status: 201 });
   } catch (error) {
-    console.error("Create task error:", error);
+    logger.error("Create task error", error);
     return NextResponse.json(
       { error: "Failed to add task" },
       { status: 500 }

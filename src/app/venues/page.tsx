@@ -20,6 +20,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card, Modal } from "@/components/ui";
 import { useEvent } from "@/context/EventContext";
 import { useDebounce } from "@/hooks/useDebounce";
+import { logger } from "@/lib/logger";
 import type { VenueEntity } from "@/types";
 
 export default function VenuesPage() {
@@ -51,7 +52,7 @@ export default function VenuesPage() {
         setVenues(data.venues || []);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to fetch venues", e);
     } finally {
       setLoading(false);
     }
@@ -77,7 +78,7 @@ export default function VenuesPage() {
         );
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to toggle favorite", e);
     }
   };
 
@@ -106,7 +107,7 @@ export default function VenuesPage() {
         setInquirySent(false);
       }, 1800);
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to fetch venues", e);
     } finally {
       setSubmittingInquiry(false);
     }

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 
 export interface EventSummary {
   id: string;
@@ -57,7 +58,7 @@ export function EventProvider({ children }: { children: React.ReactNode }) {
         }
       }
     } catch (e) {
-      console.error("Failed to load events in context:", e);
+      logger.error("Failed to load events in context", e);
     } finally {
       setLoading(false);
     }

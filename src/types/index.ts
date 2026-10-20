@@ -186,7 +186,8 @@ export interface ActivityLogEntity {
   eventId?: string | null;
   userId?: string | null;
   action: string;
-  entityType: string;
+  details?: string | null;
+  entityType?: string;
   entityId?: string | null;
   metadata?: string | null;
   createdAt: Date | string;

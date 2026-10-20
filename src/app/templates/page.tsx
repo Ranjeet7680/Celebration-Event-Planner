@@ -17,6 +17,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card, Modal } from "@/components/ui";
 import { useEvent } from "@/context/EventContext";
 import { useDebounce } from "@/hooks/useDebounce";
+import { logger } from "@/lib/logger";
 import type { EventTemplateEntity } from "@/types";
 
 export default function TemplatesPage() {
@@ -46,7 +47,7 @@ export default function TemplatesPage() {
         setTemplates(data.templates || []);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to fetch templates", e);
     } finally {
       setLoading(false);
     }
@@ -85,7 +86,7 @@ export default function TemplatesPage() {
         router.push(`/events/${data.event.id}`);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to fetch templates", e);
     } finally {
       setCreating(false);
       setSelectedTemplate(null);

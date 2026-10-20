@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { logger } from "@/lib/logger";
 
 
 export async function GET() {
@@ -20,7 +21,7 @@ export async function GET() {
 
     return NextResponse.json({ notifications, unreadCount });
   } catch (error) {
-    console.error("Fetch notifications error:", error);
+    logger.error("Fetch notifications error", error);
     return NextResponse.json(
       { error: "Failed to fetch notifications" },
       { status: 500 }
@@ -56,7 +57,7 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   } catch (error) {
-    console.error("Update notifications error:", error);
+    logger.error("Update notifications error", error);
     return NextResponse.json(
       { error: "Failed to update notification" },
       { status: 500 }

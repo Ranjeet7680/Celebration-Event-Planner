@@ -4,6 +4,8 @@ import { getCurrentUser } from "@/lib/auth";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { sanitizePlainString } from "@/lib/sanitize";
 
+import { logger } from "@/lib/logger";
+
 export async function POST(request: Request) {
   try {
     const user = await getCurrentUser();
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    console.error("AI Generation API Error:", error);
+    logger.error("AI Generation API Error", error);
     return NextResponse.json(
       { error: "Failed to generate event plan. Please refine your prompt." },
       { status: 500 }

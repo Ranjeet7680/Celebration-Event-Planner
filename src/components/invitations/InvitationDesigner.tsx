@@ -15,6 +15,7 @@ import {
   Layers,
 } from "lucide-react";
 import { Button, Badge, Card } from "@/components/ui";
+import { logger } from "@/lib/logger";
 
 const templateThemes = [
   { id: "luminary", name: "Modern Luminary", primary: "#8B5CF6", accent: "#F5C76B", font: "sans" },
@@ -60,7 +61,7 @@ export function InvitationDesigner({ eventId }: { eventId?: string }) {
           }
         }
       } catch (e) {
-        console.error(e);
+        logger.error("Failed to load invitation", e);
       }
     }
     loadInvitation();
@@ -75,7 +76,7 @@ export function InvitationDesigner({ eventId }: { eventId?: string }) {
       setSavedSuccess(true);
       setTimeout(() => setSavedSuccess(false), 3000);
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to save invitation", e);
     } finally {
       setSaving(false);
     }

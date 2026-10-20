@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { logger } from "@/lib/logger";
 
 export async function PATCH(
   request: Request,
@@ -37,7 +38,7 @@ export async function PATCH(
 
     return NextResponse.json({ success: true, expense: updated });
   } catch (error) {
-    console.error("Update expense error:", error);
+    logger.error("Update expense error", error);
     return NextResponse.json(
       { error: "Failed to update expense" },
       { status: 500 }
@@ -60,7 +61,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Delete expense error:", error);
+    logger.error("Delete expense error", error);
     return NextResponse.json(
       { error: "Failed to delete expense" },
       { status: 500 }

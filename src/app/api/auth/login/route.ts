@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyPassword, createSession } from "@/lib/auth";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: Request) {
   try {
@@ -65,7 +66,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    console.error("Login error:", error);
+    logger.error("Login error", error);
     return NextResponse.json(
       { error: "An unexpected error occurred during login" },
       { status: 500 }

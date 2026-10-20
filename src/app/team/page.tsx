@@ -15,11 +15,13 @@ import {
 import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card, Modal } from "@/components/ui";
 import { useEvent } from "@/context/EventContext";
+import { logger } from "@/lib/logger";
+import type { EventCollaboratorEntity, ActivityLogEntity } from "@/types";
 
 export default function TeamPage() {
   const { activeEvent } = useEvent();
-  const [collaborators, setCollaborators] = useState<any[]>([]);
-  const [activities, setActivities] = useState<any[]>([]);
+  const [collaborators, setCollaborators] = useState<EventCollaboratorEntity[]>([]);
+  const [activities, setActivities] = useState<ActivityLogEntity[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Invite modal
@@ -39,7 +41,7 @@ export default function TeamPage() {
         setActivities(data.event?.activityLogs || []);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to load team and logs", e);
     } finally {
       setLoading(false);
     }
@@ -56,8 +58,9 @@ export default function TeamPage() {
 
     try {
       // Simulate team collaborator invitation
-      const newCollab = {
+      const newCollab: EventCollaboratorEntity = {
         id: Date.now().toString(),
+        eventId: activeEvent?.id || "demo",
         name: inviteName,
         email: inviteEmail,
         role: inviteRole,
@@ -69,7 +72,7 @@ export default function TeamPage() {
       setInviteEmail("");
       setInviteModalOpen(false);
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to invite collaborator", e);
     } finally {
       setInviting(false);
     }
@@ -134,7 +137,7 @@ export default function TeamPage() {
                   <span>Active Access</span>
                 </span>
                 <span className="text-[11px] text-slate-500">
-                  Added {new Date(member.createdAt).toLocaleDateString()}
+                  Added {member.createdAt ? new Date(member.createdAt).toLocaleDateString() : "Recently"}
                 </span>
               </div>
             </Card>

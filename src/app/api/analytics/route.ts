@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { logger } from "@/lib/logger";
 
 
 export async function GET(request: Request) {
@@ -129,7 +130,7 @@ export async function GET(request: Request) {
       recentActivities,
     });
   } catch (error) {
-    console.error("Fetch analytics error:", error);
+    logger.error("Fetch analytics error", error);
     return NextResponse.json(
       { error: "Failed to compute analytics" },
       { status: 500 }

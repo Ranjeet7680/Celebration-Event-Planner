@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { logger } from "@/lib/logger";
 
 export const EventPlanItemSchema = z.object({
   title: z.string(),
@@ -351,7 +352,7 @@ Return ONLY pure JSON. No markdown backticks.`,
         }
       }
     } catch (err) {
-      console.warn("Live Gemini request failed, falling back to deterministic demo generator:", err);
+      logger.warn("Live Gemini request failed, falling back to deterministic demo generator", { error: String(err) });
     }
   }
 
@@ -395,7 +396,7 @@ Return ONLY pure JSON. No markdown backticks.`,
         }
       }
     } catch (err) {
-      console.warn("Live OpenAI request failed, falling back to deterministic demo generator:", err);
+      logger.warn("Live OpenAI request failed, falling back to deterministic demo generator", { error: String(err) });
     }
   }
 

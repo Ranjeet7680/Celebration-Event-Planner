@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Sparkles, Check, ArrowRight, Compass, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui";
+import { logger } from "@/lib/logger";
 
 const eventCategories = [
   "Cultural Festivals",
@@ -59,7 +60,7 @@ export default function OnboardingPage() {
       });
       router.push("/dashboard");
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to save onboarding settings", e);
       router.push("/dashboard");
     } finally {
       setSaving(false);

@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import { prisma } from "./prisma";
+import { logger } from "./logger";
 
 const SESSION_COOKIE_NAME = "promptwars_session";
 
@@ -23,7 +24,7 @@ export async function createSession(userId: string) {
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });
   } catch (e) {
-    console.error("Failed to set session cookie:", e);
+    logger.error("Failed to set session cookie", e);
   }
 }
 
@@ -32,7 +33,7 @@ export async function clearSession() {
     const cookieStore = await cookies();
     cookieStore.delete(SESSION_COOKIE_NAME);
   } catch (e) {
-    console.error("Failed to clear session cookie:", e);
+    logger.error("Failed to clear session cookie", e);
   }
 }
 

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { sanitizePlainString } from "@/lib/sanitize";
+import { logger } from "@/lib/logger";
 
 export async function GET(request: Request) {
   try {
@@ -53,7 +54,7 @@ export async function GET(request: Request) {
       }
     );
   } catch (error) {
-    console.error("Error fetching events:", error);
+    logger.error("Error fetching events", error);
     return NextResponse.json(
       { error: "Failed to fetch events" },
       { status: 500 }
@@ -167,7 +168,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, event: newEvent }, { status: 201 });
   } catch (error) {
-    console.error("Error creating event:", error);
+    logger.error("Error creating event", error);
     return NextResponse.json(
       { error: "Failed to create event" },
       { status: 500 }

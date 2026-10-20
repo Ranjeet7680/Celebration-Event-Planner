@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { logger } from "@/lib/logger";
 
 export async function GET(request: Request) {
   try {
@@ -49,7 +50,7 @@ export async function GET(request: Request) {
       }
     );
   } catch (error) {
-    console.error("Fetch venues error:", error);
+    logger.error("Fetch venues error", error);
     return NextResponse.json(
       { error: "Failed to fetch venues" },
       { status: 500 }

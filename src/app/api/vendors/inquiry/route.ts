@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: Request) {
   try {
@@ -43,7 +44,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, inquiry }, { status: 201 });
   } catch (error) {
-    console.error("Vendor inquiry error:", error);
+    logger.error("Vendor inquiry error", error);
     return NextResponse.json(
       { error: "Failed to send vendor inquiry" },
       { status: 500 }

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { logger } from "@/lib/logger";
 import {
   Sparkles,
   Calendar,
@@ -87,7 +88,7 @@ export default function DashboardPage() {
           setAnalytics(aData);
         }
       } catch (err) {
-        console.error("Dashboard data load error:", err);
+        logger.error("Dashboard data load error", err);
       } finally {
         setLoading(false);
       }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { sanitizePlainString } from "@/lib/sanitize";
+import { logger } from "@/lib/logger";
 
 export async function GET(
   request: Request,
@@ -28,7 +29,7 @@ export async function GET(
       }
     );
   } catch (error) {
-    console.error("Fetch guests error:", error);
+    logger.error("Fetch guests error", error);
     return NextResponse.json(
       { error: "Failed to fetch guests" },
       { status: 500 }
@@ -88,7 +89,7 @@ export async function POST(
 
     return NextResponse.json({ success: true, guest }, { status: 201 });
   } catch (error) {
-    console.error("Create guest error:", error);
+    logger.error("Create guest error", error);
     return NextResponse.json(
       { error: "Failed to add guest" },
       { status: 500 }

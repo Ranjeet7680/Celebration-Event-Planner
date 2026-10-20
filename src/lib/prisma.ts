@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import fs from "fs";
 import path from "path";
+import { logger } from "./logger";
 
 function getDatabaseUrl(): string | undefined {
   const envUrl = process.env.DATABASE_URL;
@@ -17,7 +18,7 @@ function getDatabaseUrl(): string | undefined {
       try {
         fs.copyFileSync(srcDbPath, tmpDbPath);
       } catch (e) {
-        console.error("Failed to copy SQLite db to /tmp:", e);
+        logger.error("Failed to copy SQLite db to /tmp", e);
       }
     }
     return `file:${tmpDbPath}`;

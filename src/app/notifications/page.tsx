@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { logger } from "@/lib/logger";
 import {
   Bell,
   CheckCircle2,
@@ -16,8 +17,19 @@ import {
 import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card } from "@/components/ui";
 
+interface NotificationItem {
+  id: string;
+  userId?: string;
+  title: string;
+  message: string;
+  type: string;
+  link?: string | null;
+  isRead: boolean;
+  createdAt: string;
+}
+
 export default function NotificationsPage() {
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
@@ -31,7 +43,7 @@ export default function NotificationsPage() {
         setUnreadCount(data.unreadCount || 0);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to fetch notifications", e);
     } finally {
       setLoading(false);
     }
@@ -53,7 +65,7 @@ export default function NotificationsPage() {
         setUnreadCount(0);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to mark all as read", e);
     }
   };
 
@@ -69,7 +81,7 @@ export default function NotificationsPage() {
       );
       setUnreadCount((c) => Math.max(0, c - 1));
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to mark notification as read", e);
     }
   };
 

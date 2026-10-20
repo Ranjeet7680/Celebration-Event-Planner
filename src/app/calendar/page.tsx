@@ -14,13 +14,13 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card, Modal } from "@/components/ui";
-import { useEvent } from "@/context/EventContext";
+import { useEvent, type EventSummary } from "@/context/EventContext";
 
 export default function CalendarPage() {
   const { events } = useEvent();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<"month" | "agenda">("month");
-  const [selectedDayEvents, setSelectedDayEvents] = useState<any[] | null>(null);
+  const [selectedDayEvents, setSelectedDayEvents] = useState<EventSummary[] | null>(null);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();

@@ -27,6 +27,7 @@ import {
 import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card } from "@/components/ui";
 import { useEvent } from "@/context/EventContext";
+import { logger } from "@/lib/logger";
 
 interface SpendingEntry {
   category: string;
@@ -81,7 +82,7 @@ export default function AnalyticsPage() {
         setData(json);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to fetch analytics", e);
     } finally {
       setLoading(false);
     }

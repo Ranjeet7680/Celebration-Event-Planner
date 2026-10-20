@@ -7,11 +7,12 @@ const eslintConfig = defineConfig([
   ...nextTs,
   {
     rules: {
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "error",
+      "no-console": "error",
+      "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
       "react-hooks/set-state-in-effect": "off",
-      "react-hooks/purity": "off",
-      "react-hooks/exhaustive-deps": "off",
+      "react-hooks/purity": "warn",
+      "react-hooks/exhaustive-deps": "warn",
       "@next/next/no-img-element": "off",
     },
   },

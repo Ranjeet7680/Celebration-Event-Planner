@@ -16,6 +16,7 @@ import {
   Layers,
 } from "lucide-react";
 import { Button, Badge, Card, Modal } from "@/components/ui";
+import { logger } from "@/lib/logger";
 
 interface TaskItem {
   id: string;
@@ -65,7 +66,7 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
         setMetrics(data.metrics);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to fetch tasks", e);
     } finally {
       setLoading(false);
     }
@@ -145,7 +146,7 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
         }
       }
     } catch (err) {
-      console.error(err);
+      logger.error("Failed to save task", err);
     } finally {
       setSaving(false);
     }
@@ -160,7 +161,7 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
       });
       fetchTasks();
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to move task status", e);
     }
   };
 
@@ -170,7 +171,7 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
       await fetch(`/api/tasks/${taskId}`, { method: "DELETE" });
       fetchTasks();
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to delete task", e);
     }
   };
 
@@ -464,10 +465,11 @@ function TaskCard({
   onMoveBack?: () => void;
   onMoveForward?: () => void;
 }) {
+  const [currentTimestamp] = React.useState(() => Date.now());
   const isOverdue =
     task.dueDate &&
     task.status !== "completed" &&
-    new Date(task.dueDate).getTime() < Date.now();
+    new Date(task.dueDate).getTime() < currentTimestamp;
 
   const priorityBadge =
     task.priority === "urgent"

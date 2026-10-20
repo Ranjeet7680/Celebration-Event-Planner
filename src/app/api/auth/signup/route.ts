@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { hashPassword, createSession } from "@/lib/auth";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { sanitizePlainString } from "@/lib/sanitize";
+import { logger } from "@/lib/logger";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -90,7 +91,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    console.error("Signup error:", error);
+    logger.error("Signup error", error);
     return NextResponse.json(
       { error: "An unexpected error occurred during account creation" },
       { status: 500 }

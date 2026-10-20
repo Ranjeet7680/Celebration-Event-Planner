@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card } from "@/components/ui";
+import { logger } from "@/lib/logger";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -55,7 +56,7 @@ export default function SettingsPage() {
           }
         }
       } catch (e) {
-        console.error(e);
+        logger.error("Failed to load settings", e);
       }
     }
     loadSettings();
@@ -85,7 +86,7 @@ export default function SettingsPage() {
         setTimeout(() => setSavedSuccess(false), 3000);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to save profile", e);
     } finally {
       setSaving(false);
     }
@@ -105,7 +106,7 @@ export default function SettingsPage() {
       await fetch("/api/auth/logout", { method: "POST" });
       router.push("/login");
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to sign out", e);
     }
   };
 

@@ -26,10 +26,22 @@ import {
   CartesianGrid,
 } from "recharts";
 import { Button, Badge, Card, Modal } from "@/components/ui";
+import { logger } from "@/lib/logger";
+import type { ExpenseEntity } from "@/types";
+
+interface BudgetDetail {
+  id: string;
+  eventId: string;
+  totalBudget: number;
+  allocatedBudget: number;
+  currency: string;
+  notes?: string | null;
+  categories?: { id: string; name: string; allocated: number; spent: number }[];
+}
 
 export function BudgetPlannerView({ eventId }: { eventId?: string }) {
-  const [budget, setBudget] = useState<any>(null);
-  const [expenses, setExpenses] = useState<any[]>([]);
+  const [budget, setBudget] = useState<BudgetDetail | null>(null);
+  const [expenses, setExpenses] = useState<ExpenseEntity[]>([]);
   const [currency, setCurrency] = useState("USD");
   const [loading, setLoading] = useState(true);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
@@ -57,7 +69,7 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
         if (data.budget?.currency) setCurrency(data.budget.currency);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to fetch budget and expenses", e);
     } finally {
       setLoading(false);
     }
@@ -130,7 +142,7 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
       const res = await fetch(`/api/expenses/${id}`, { method: "DELETE" });
       if (res.ok) fetchBudgetAndExpenses();
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to delete expense", e);
     }
   };
 

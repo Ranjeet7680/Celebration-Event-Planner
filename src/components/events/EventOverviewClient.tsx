@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Button, Badge, Card, Modal } from "@/components/ui";
+import { logger } from "@/lib/logger";
 import type {
   EventDetailEntity,
   TaskEntity,
@@ -52,7 +53,7 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
         setEditStatus(data.event.status);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to fetch event", e);
     } finally {
       setLoading(false);
     }
@@ -79,7 +80,7 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
         fetchEvent();
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to update event", e);
     }
   };
 
@@ -89,7 +90,7 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
       const res = await fetch(`/api/events/${eventId}`, { method: "DELETE" });
       if (res.ok) router.push("/dashboard");
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to delete event", e);
     }
   };
 

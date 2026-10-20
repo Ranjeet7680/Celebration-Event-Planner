@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { logger } from "@/lib/logger";
 
 export async function PATCH(
   request: Request,
@@ -54,7 +55,7 @@ export async function PATCH(
 
     return NextResponse.json({ success: true, guest: updated });
   } catch (error) {
-    console.error("Update guest error:", error);
+    logger.error("Update guest error", error);
     return NextResponse.json(
       { error: "Failed to update guest" },
       { status: 500 }
@@ -77,7 +78,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Delete guest error:", error);
+    logger.error("Delete guest error", error);
     return NextResponse.json(
       { error: "Failed to delete guest" },
       { status: 500 }

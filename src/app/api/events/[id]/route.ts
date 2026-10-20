@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { logger } from "@/lib/logger";
 
 
 export async function GET(
@@ -57,7 +58,7 @@ export async function GET(
 
     return NextResponse.json({ event });
   } catch (error) {
-    console.error("Error fetching event details:", error);
+    logger.error("Error fetching event details", error);
     return NextResponse.json(
       { error: "Failed to fetch event" },
       { status: 500 }
@@ -141,7 +142,7 @@ export async function PATCH(
 
     return NextResponse.json({ success: true, event: updatedEvent });
   } catch (error) {
-    console.error("Error updating event:", error);
+    logger.error("Error updating event", error);
     return NextResponse.json(
       { error: "Failed to update event" },
       { status: 500 }
@@ -181,7 +182,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting event:", error);
+    logger.error("Error deleting event", error);
     return NextResponse.json(
       { error: "Failed to delete event" },
       { status: 500 }

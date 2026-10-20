@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: Request) {
   try {
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ isFavorited: true });
     }
   } catch (error) {
-    console.error("Toggle venue favorite error:", error);
+    logger.error("Toggle venue favorite error", error);
     return NextResponse.json(
       { error: "Failed to toggle favorite" },
       { status: 500 }

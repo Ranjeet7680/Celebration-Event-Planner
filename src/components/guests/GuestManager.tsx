@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Button, Badge, Card, Modal } from "@/components/ui";
 import { useDebounce } from "@/hooks/useDebounce";
+import { logger } from "@/lib/logger";
 import type { GuestEntity, RsvpStatus } from "@/types";
 
 export function GuestManager({ eventId }: { eventId?: string }) {
@@ -52,7 +53,7 @@ export function GuestManager({ eventId }: { eventId?: string }) {
         setGuests(data.guests || []);
       }
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to fetch guests", e);
     } finally {
       setLoading(false);
     }
@@ -134,7 +135,7 @@ export function GuestManager({ eventId }: { eventId?: string }) {
         }
       }
     } catch (err) {
-      console.error(err);
+      logger.error("Failed to save guest", err);
     } finally {
       setSaving(false);
     }
@@ -146,7 +147,7 @@ export function GuestManager({ eventId }: { eventId?: string }) {
       const res = await fetch(`/api/guests/${id}`, { method: "DELETE" });
       if (res.ok) fetchGuests();
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to delete guest", e);
     }
   };
 
@@ -159,7 +160,7 @@ export function GuestManager({ eventId }: { eventId?: string }) {
       });
       fetchGuests();
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to update guest status", e);
     }
   };
 
