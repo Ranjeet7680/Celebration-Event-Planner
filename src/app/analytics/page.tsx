@@ -152,6 +152,9 @@ export default function AnalyticsPage() {
 
           <div className="flex items-center gap-3">
             <select
+              id="analytics-event-filter"
+              name="selectedEventId"
+              aria-label="Filter celebration events"
               value={selectedEventId}
               onChange={(e) => setSelectedEventId(e.target.value)}
               className="bg-[#171F35] border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-violet-500 font-medium"

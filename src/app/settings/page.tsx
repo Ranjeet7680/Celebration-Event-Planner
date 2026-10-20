@@ -142,10 +142,12 @@ export default function SettingsPage() {
           <form onSubmit={handleSaveProfile} className="space-y-4 pt-4 border-t border-slate-800">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label htmlFor="profile-name" className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Display Name
                 </label>
                 <input
+                  id="profile-name"
+                  name="name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -154,10 +156,12 @@ export default function SettingsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label htmlFor="profile-email" className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Email Address (Verified)
                 </label>
                 <input
+                  id="profile-email"
+                  name="email"
                   type="email"
                   disabled
                   value={email}
@@ -168,10 +172,12 @@ export default function SettingsPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label htmlFor="profile-theme" className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Default Theme
                 </label>
                 <select
+                  id="profile-theme"
+                  name="theme"
                   value={theme}
                   onChange={(e) => setTheme(e.target.value)}
                   className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
@@ -183,10 +189,12 @@ export default function SettingsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label htmlFor="profile-experience" className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Planning Experience
                 </label>
                 <select
+                  id="profile-experience"
+                  name="experience"
                   value={experience}
                   onChange={(e) => setExperience(e.target.value)}
                   className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
@@ -198,10 +206,12 @@ export default function SettingsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label htmlFor="profile-budget-range" className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Budget Scale Tier
                 </label>
                 <select
+                  id="profile-budget-range"
+                  name="budgetRange"
                   value={budgetRange}
                   onChange={(e) => setBudgetRange(e.target.value)}
                   className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
@@ -220,11 +230,13 @@ export default function SettingsPage() {
               </h4>
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-[#0B1020] border border-slate-800">
-                <div>
+                <label htmlFor="alerts-rsvp" className="cursor-pointer">
                   <p className="text-xs font-semibold text-white">In-App Task & RSVP Alerts</p>
                   <p className="text-[11px] text-slate-400">Receive real-time notifications when guests RSVP or tasks are completed.</p>
-                </div>
+                </label>
                 <input
+                  id="alerts-rsvp"
+                  name="notificationsEnabled"
                   type="checkbox"
                   checked={notificationsEnabled}
                   onChange={(e) => setNotificationsEnabled(e.target.checked)}
@@ -233,11 +245,13 @@ export default function SettingsPage() {
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-[#0B1020] border border-slate-800">
-                <div>
+                <label htmlFor="alerts-digest" className="cursor-pointer">
                   <p className="text-xs font-semibold text-white">Weekly Executive Digest</p>
                   <p className="text-[11px] text-slate-400">Email summary of remaining budgets and approaching milestone deadlines.</p>
-                </div>
+                </label>
                 <input
+                  id="alerts-digest"
+                  name="emailUpdates"
                   type="checkbox"
                   checked={emailUpdates}
                   onChange={(e) => setEmailUpdates(e.target.checked)}
@@ -280,11 +294,14 @@ export default function SettingsPage() {
           <form onSubmit={handleUpdatePassword} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label htmlFor="current-password" className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Current Password
                 </label>
                 <input
+                  id="current-password"
+                  name="currentPassword"
                   type="password"
+                  autoComplete="current-password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="••••••••"
@@ -293,11 +310,14 @@ export default function SettingsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label htmlFor="new-password" className="block text-xs font-semibold text-slate-300 mb-1.5">
                   New Password (min 8 chars)
                 </label>
                 <input
+                  id="new-password"
+                  name="newPassword"
                   type="password"
+                  autoComplete="new-password"
                   minLength={8}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}

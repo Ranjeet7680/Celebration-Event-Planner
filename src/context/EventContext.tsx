@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { logger } from "@/lib/logger";
 
 export interface EventSummary {
@@ -40,7 +40,7 @@ export function EventProvider({ children }: { children: React.ReactNode }) {
   const [activeEventId, setActiveEventId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
       const res = await fetch("/api/events");
       if (res.ok) {
@@ -62,32 +62,38 @@ export function EventProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeEventId]);
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [fetchEvents]);
 
-  const handleSetActiveEvent = (id: string) => {
+  const handleSetActiveEvent = useCallback((id: string) => {
     setActiveEventId(id);
     if (typeof window !== "undefined") {
       localStorage.setItem("promptwars_active_event", id);
     }
-  };
+  }, []);
 
-  const activeEvent = events.find((e) => e.id === activeEventId) || events[0] || null;
+  const activeEvent = useMemo(
+    () => events.find((e) => e.id === activeEventId) || events[0] || null,
+    [events, activeEventId]
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      activeEventId: activeEvent?.id || null,
+      setActiveEventId: handleSetActiveEvent,
+      events,
+      activeEvent,
+      refreshEvents: fetchEvents,
+      loading,
+    }),
+    [activeEvent, handleSetActiveEvent, events, fetchEvents, loading]
+  );
 
   return (
-    <EventContext.Provider
-      value={{
-        activeEventId: activeEvent?.id || null,
-        setActiveEventId: handleSetActiveEvent,
-        events,
-        activeEvent,
-        refreshEvents: fetchEvents,
-        loading,
-      }}
-    >
+    <EventContext.Provider value={contextValue}>
       {children}
     </EventContext.Provider>
   );

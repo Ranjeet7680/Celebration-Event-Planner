@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -106,13 +106,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     setMobileMenuOpen(false);
   }, [pathname]);
 
-  const searchResults = searchQuery.trim()
-    ? events.filter((e) =>
-        e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        e.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        e.category.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : [];
+  const searchResults = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [];
+    return events.filter(
+      (e) =>
+        e.title.toLowerCase().includes(q) ||
+        e.location.toLowerCase().includes(q) ||
+        e.category.toLowerCase().includes(q)
+    );
+  }, [events, searchQuery]);
 
   return (
     <div className="min-h-screen bg-[#0B1020] text-slate-100 flex flex-col md:flex-row">
@@ -207,6 +210,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
           <select
+            id="active-project-select"
+            name="activeProjectId"
+            aria-label="Select active project"
             value={activeEvent?.id || ""}
             onChange={(e) => setActiveEventId(e.target.value)}
             className="w-full bg-[#171F35] border border-slate-700/80 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 font-medium focus:outline-none focus:border-violet-500"
@@ -357,7 +363,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <div className="p-4 border-b border-slate-700/80 flex items-center gap-3">
               <Search className="w-5 h-5 text-violet-400" />
               <input
+                id="global-search-input"
+                name="searchQuery"
+                aria-label="Search events, locations, categories"
                 type="text"
+                autoComplete="off"
                 autoFocus
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

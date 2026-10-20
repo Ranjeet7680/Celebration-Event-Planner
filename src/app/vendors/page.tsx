@@ -147,6 +147,9 @@ export default function VendorsPage() {
           <div className="relative w-full sm:w-64 shrink-0">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
+              id="vendor-search-input"
+              name="search"
+              aria-label="Search vendors by name"
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -245,10 +248,12 @@ export default function VendorsPage() {
               <form onSubmit={handleSendInquiry} className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    <label htmlFor="vendor-inquiry-date" className="block text-xs font-semibold text-slate-300 mb-1">
                       Event Date Needed
                     </label>
                     <input
+                      id="vendor-inquiry-date"
+                      name="inquiryDate"
                       type="date"
                       required
                       value={inquiryDate}
@@ -258,10 +263,12 @@ export default function VendorsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    <label htmlFor="vendor-inquiry-budget" className="block text-xs font-semibold text-slate-300 mb-1">
                       Estimated Budget ($)
                     </label>
                     <input
+                      id="vendor-inquiry-budget"
+                      name="inquiryBudget"
                       type="number"
                       required
                       value={inquiryBudget}
@@ -272,10 +279,12 @@ export default function VendorsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label htmlFor="vendor-inquiry-message" className="block text-xs font-semibold text-slate-300 mb-1">
                     Requirements & Brief
                   </label>
                   <textarea
+                    id="vendor-inquiry-message"
+                    name="inquiryMessage"
                     rows={4}
                     required
                     value={inquiryMessage}

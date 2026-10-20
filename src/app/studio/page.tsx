@@ -252,10 +252,12 @@ export default function ThemeStudioPage() {
           >
             <form onSubmit={handleAddItem} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="inspiration-title" className="block text-xs font-semibold text-slate-300 mb-1">
                   Title
                 </label>
                 <input
+                  id="inspiration-title"
+                  name="itemTitle"
                   type="text"
                   required
                   value={itemTitle}
@@ -266,10 +268,12 @@ export default function ThemeStudioPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="inspiration-category" className="block text-xs font-semibold text-slate-300 mb-1">
                   Category
                 </label>
                 <select
+                  id="inspiration-category"
+                  name="itemCategory"
                   value={itemCategory}
                   onChange={(e) => setItemCategory(e.target.value)}
                   className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
@@ -282,10 +286,12 @@ export default function ThemeStudioPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="inspiration-image-url" className="block text-xs font-semibold text-slate-300 mb-1">
                   Image URL
                 </label>
                 <input
+                  id="inspiration-image-url"
+                  name="itemImageUrl"
                   type="url"
                   required
                   value={itemImageUrl}
@@ -296,10 +302,12 @@ export default function ThemeStudioPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="inspiration-notes" className="block text-xs font-semibold text-slate-300 mb-1">
                   Design Notes & Placement
                 </label>
                 <textarea
+                  id="inspiration-notes"
+                  name="itemNotes"
                   rows={2}
                   value={itemNotes}
                   onChange={(e) => setItemNotes(e.target.value)}

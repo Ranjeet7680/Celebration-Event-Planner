@@ -334,10 +334,12 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
         >
           <form onSubmit={handleSave} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="task-title" className="block text-xs font-semibold text-slate-300 mb-1">
                 Task Title *
               </label>
               <input
+                id="task-title"
+                name="title"
                 type="text"
                 required
                 value={title}
@@ -349,10 +351,12 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="task-category" className="block text-xs font-semibold text-slate-300 mb-1">
                   Category
                 </label>
                 <input
+                  id="task-category"
+                  name="category"
                   type="text"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
@@ -362,10 +366,12 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="task-priority" className="block text-xs font-semibold text-slate-300 mb-1">
                   Priority
                 </label>
                 <select
+                  id="task-priority"
+                  name="priority"
                   value={priority}
                   onChange={(e) => setPriority(e.target.value as "urgent" | "high" | "medium" | "low")}
                   className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
@@ -380,10 +386,12 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="task-assigned-to" className="block text-xs font-semibold text-slate-300 mb-1">
                   Assigned To
                 </label>
                 <input
+                  id="task-assigned-to"
+                  name="assignedTo"
                   type="text"
                   value={assignedTo}
                   onChange={(e) => setAssignedTo(e.target.value)}
@@ -392,10 +400,12 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="task-due-date" className="block text-xs font-semibold text-slate-300 mb-1">
                   Due Date
                 </label>
                 <input
+                  id="task-due-date"
+                  name="dueDate"
                   type="date"
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
@@ -405,10 +415,12 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="task-status" className="block text-xs font-semibold text-slate-300 mb-1">
                 Column Status
               </label>
               <select
+                id="task-status"
+                name="status"
                 value={status}
                 onChange={(e) => setStatus(e.target.value as "todo" | "in_progress" | "completed")}
                 className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
@@ -420,10 +432,12 @@ export function TaskKanbanView({ eventId }: { eventId?: string }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="task-description" className="block text-xs font-semibold text-slate-300 mb-1">
                 Description / Notes
               </label>
               <textarea
+                id="task-description"
+                name="description"
                 rows={2}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}

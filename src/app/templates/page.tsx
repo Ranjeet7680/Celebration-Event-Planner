@@ -128,6 +128,9 @@ export default function TemplatesPage() {
           <div className="relative w-full sm:w-72">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
+              id="template-search-input"
+              name="search"
+              aria-label="Search event templates"
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -213,10 +216,12 @@ export default function TemplatesPage() {
           >
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="custom-template-title" className="block text-xs font-semibold text-slate-300 mb-1">
                   Event Title
                 </label>
                 <input
+                  id="custom-template-title"
+                  name="customTitle"
                   type="text"
                   value={customTitle}
                   onChange={(e) => setCustomTitle(e.target.value)}
@@ -225,10 +230,12 @@ export default function TemplatesPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="custom-template-date" className="block text-xs font-semibold text-slate-300 mb-1">
                   Target Event Date
                 </label>
                 <input
+                  id="custom-template-date"
+                  name="eventDate"
                   type="date"
                   value={eventDate}
                   onChange={(e) => setEventDate(e.target.value)}

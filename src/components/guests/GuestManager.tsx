@@ -333,6 +333,9 @@ export function GuestManager({ eventId }: { eventId?: string }) {
           <div className="relative w-full sm:w-64">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
+              id="guest-search-input"
+              name="search"
+              aria-label="Search guests by name or email"
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -342,6 +345,9 @@ export function GuestManager({ eventId }: { eventId?: string }) {
           </div>
 
           <select
+            id="guest-rsvp-filter"
+            name="rsvpFilter"
+            aria-label="Filter guests by RSVP status"
             value={rsvpFilter}
             onChange={(e) => setRsvpFilter(e.target.value)}
             className="bg-[#171F35] border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-300 focus:outline-none"
@@ -392,6 +398,9 @@ export function GuestManager({ eventId }: { eventId?: string }) {
                     </td>
                     <td className="py-3.5 px-4">
                       <select
+                        id={`guest-rsvp-${g.id}`}
+                        name={`rsvpStatus_${g.id}`}
+                        aria-label={`Update RSVP status for ${g.name}`}
                         value={g.rsvpStatus}
                         onChange={(e) => handleQuickStatusChange(g.id, e.target.value)}
                         className={`text-xs font-semibold px-2.5 py-1 rounded-lg border focus:outline-none ${
@@ -460,10 +469,12 @@ export function GuestManager({ eventId }: { eventId?: string }) {
         >
           <form onSubmit={handleSave} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="guest-full-name" className="block text-xs font-semibold text-slate-300 mb-1">
                 Full Name *
               </label>
               <input
+                id="guest-full-name"
+                name="name"
                 type="text"
                 required
                 value={name}
@@ -475,10 +486,12 @@ export function GuestManager({ eventId }: { eventId?: string }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="guest-email" className="block text-xs font-semibold text-slate-300 mb-1">
                   Email
                 </label>
                 <input
+                  id="guest-email"
+                  name="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -488,10 +501,12 @@ export function GuestManager({ eventId }: { eventId?: string }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="guest-phone" className="block text-xs font-semibold text-slate-300 mb-1">
                   Phone
                 </label>
                 <input
+                  id="guest-phone"
+                  name="phone"
                   type="text"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -503,10 +518,12 @@ export function GuestManager({ eventId }: { eventId?: string }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="guest-group" className="block text-xs font-semibold text-slate-300 mb-1">
                   Group
                 </label>
                 <select
+                  id="guest-group"
+                  name="group"
                   value={group}
                   onChange={(e) => setGroup(e.target.value)}
                   className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
@@ -520,10 +537,12 @@ export function GuestManager({ eventId }: { eventId?: string }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="guest-rsvp-status" className="block text-xs font-semibold text-slate-300 mb-1">
                   RSVP Status
                 </label>
                 <select
+                  id="guest-rsvp-status"
+                  name="rsvpStatus"
                   value={rsvpStatus}
                   onChange={(e) => setRsvpStatus(e.target.value as RsvpStatus)}
                   className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
@@ -536,10 +555,12 @@ export function GuestManager({ eventId }: { eventId?: string }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="guest-plus-one" className="block text-xs font-semibold text-slate-300 mb-1">
                   Plus-Ones
                 </label>
                 <input
+                  id="guest-plus-one"
+                  name="plusOne"
                   type="number"
                   min="0"
                   max="10"
@@ -551,10 +572,12 @@ export function GuestManager({ eventId }: { eventId?: string }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="guest-dietary" className="block text-xs font-semibold text-slate-300 mb-1">
                 Dietary Restrictions
               </label>
               <input
+                id="guest-dietary"
+                name="dietary"
                 type="text"
                 value={dietary}
                 onChange={(e) => setDietary(e.target.value)}
@@ -564,10 +587,12 @@ export function GuestManager({ eventId }: { eventId?: string }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="guest-notes" className="block text-xs font-semibold text-slate-300 mb-1">
                 Notes & Special Seating
               </label>
               <textarea
+                id="guest-notes"
+                name="notes"
                 rows={2}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}

@@ -1,10 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { EventProvider } from "@/context/EventContext";
 
 export const metadata: Metadata = {
   title: "PromptWars — AI-Powered Celebration & Event Planner",
   description: "Every celebration starts with a spark. AI assistance, budget tracking, guest management, and vendor marketplace for extraordinary events.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0B1020",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

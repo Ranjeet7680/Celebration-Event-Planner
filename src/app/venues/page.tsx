@@ -132,6 +132,9 @@ export default function VenuesPage() {
           <div className="relative">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
+              id="venue-search-input"
+              name="search"
+              aria-label="Search venues by name, city, amenity"
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -141,8 +144,11 @@ export default function VenuesPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-slate-400 shrink-0">Min Capacity:</span>
+            <label htmlFor="venue-min-capacity" className="text-xs font-semibold text-slate-400 shrink-0">Min Capacity:</label>
             <select
+              id="venue-min-capacity"
+              name="minCapacity"
+              aria-label="Minimum Guest Capacity"
               value={minCapacity}
               onChange={(e) => setMinCapacity(e.target.value)}
               className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-violet-500"
@@ -156,8 +162,11 @@ export default function VenuesPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-slate-400 shrink-0">Max Day Rate:</span>
+            <label htmlFor="venue-max-price" className="text-xs font-semibold text-slate-400 shrink-0">Max Day Rate:</label>
             <select
+              id="venue-max-price"
+              name="maxPrice"
+              aria-label="Maximum Day Rate"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
               className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-violet-500"
@@ -290,10 +299,12 @@ export default function VenuesPage() {
             ) : (
               <form onSubmit={handleSubmitInquiry} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label htmlFor="venue-inquiry-date" className="block text-xs font-semibold text-slate-300 mb-1">
                     Proposed Date
                   </label>
                   <input
+                    id="venue-inquiry-date"
+                    name="inquiryDate"
                     type="date"
                     required
                     value={inquiryDate}
@@ -303,10 +314,12 @@ export default function VenuesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label htmlFor="venue-inquiry-message" className="block text-xs font-semibold text-slate-300 mb-1">
                     Inquiry Message & Requirements
                   </label>
                   <textarea
+                    id="venue-inquiry-message"
+                    name="inquiryMessage"
                     rows={4}
                     required
                     value={inquiryMessage}

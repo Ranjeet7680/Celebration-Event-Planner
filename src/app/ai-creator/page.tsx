@@ -181,11 +181,13 @@ export default function AICreatorPage() {
         {/* Prompt Input Box & Sample Chips */}
         <Card className="p-6 border-slate-700/80 shadow-2xl relative">
           <div className="mb-4">
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+            <label htmlFor="ai-prompt-input" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
               Natural Language Event Prompt
             </label>
             <div className="relative">
               <textarea
+                id="ai-prompt-input"
+                name="prompt"
                 rows={4}
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}

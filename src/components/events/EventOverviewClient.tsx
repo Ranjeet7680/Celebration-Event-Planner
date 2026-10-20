@@ -414,8 +414,10 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
           >
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Title</label>
+                <label htmlFor="edit-event-title" className="block text-xs font-semibold text-slate-300 mb-1">Title</label>
                 <input
+                  id="edit-event-title"
+                  name="editTitle"
                   type="text"
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
@@ -424,8 +426,10 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Location</label>
+                <label htmlFor="edit-event-location" className="block text-xs font-semibold text-slate-300 mb-1">Location</label>
                 <input
+                  id="edit-event-location"
+                  name="editLocation"
                   type="text"
                   value={editLocation}
                   onChange={(e) => setEditLocation(e.target.value)}
@@ -434,8 +438,10 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Total Budget</label>
+                <label htmlFor="edit-event-budget" className="block text-xs font-semibold text-slate-300 mb-1">Total Budget</label>
                 <input
+                  id="edit-event-budget"
+                  name="editBudget"
                   type="number"
                   value={editBudget}
                   onChange={(e) => setEditBudget(e.target.value)}
@@ -444,8 +450,10 @@ export function EventOverviewClient({ eventId }: { eventId: string }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Status</label>
+                <label htmlFor="edit-event-status" className="block text-xs font-semibold text-slate-300 mb-1">Status</label>
                 <select
+                  id="edit-event-status"
+                  name="editStatus"
                   value={editStatus}
                   onChange={(e) => setEditStatus(e.target.value)}
                   className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-sm text-white"

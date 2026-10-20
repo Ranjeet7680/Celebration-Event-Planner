@@ -154,10 +154,12 @@ export function InvitationDesigner({ eventId }: { eventId?: string }) {
 
             <div className="pt-4 border-t border-slate-800 space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label htmlFor="invitation-headline" className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Headline Title
                 </label>
                 <input
+                  id="invitation-headline"
+                  name="headline"
                   type="text"
                   value={headline}
                   onChange={(e) => setHeadline(e.target.value)}
@@ -166,10 +168,12 @@ export function InvitationDesigner({ eventId }: { eventId?: string }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label htmlFor="invitation-message" className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Invitation Message
                 </label>
                 <textarea
+                  id="invitation-message"
+                  name="message"
                   rows={3}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
@@ -178,10 +182,12 @@ export function InvitationDesigner({ eventId }: { eventId?: string }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label htmlFor="invitation-venue-address" className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Venue & Address
                 </label>
                 <input
+                  id="invitation-venue-address"
+                  name="venueAddress"
                   type="text"
                   value={venueAddress}
                   onChange={(e) => setVenueAddress(e.target.value)}
@@ -190,10 +196,12 @@ export function InvitationDesigner({ eventId }: { eventId?: string }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label htmlFor="invitation-dress-code" className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Dress Code
                 </label>
                 <input
+                  id="invitation-dress-code"
+                  name="dressCode"
                   type="text"
                   value={dressCode}
                   onChange={(e) => setDressCode(e.target.value)}
@@ -203,11 +211,14 @@ export function InvitationDesigner({ eventId }: { eventId?: string }) {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                  <label htmlFor="invitation-primary-color" className="block text-xs font-semibold text-slate-300 mb-1.5">
                     Primary Accent Color
                   </label>
                   <div className="flex items-center gap-2 bg-[#0B1020] border border-slate-700 rounded-xl px-2 py-1.5">
                     <input
+                      id="invitation-primary-color"
+                      name="primaryColor"
+                      aria-label="Primary Accent Color"
                       type="color"
                       value={primaryColor}
                       onChange={(e) => setPrimaryColor(e.target.value)}
@@ -218,11 +229,14 @@ export function InvitationDesigner({ eventId }: { eventId?: string }) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                  <label htmlFor="invitation-accent-color" className="block text-xs font-semibold text-slate-300 mb-1.5">
                     Highlight Gold Color
                   </label>
                   <div className="flex items-center gap-2 bg-[#0B1020] border border-slate-700 rounded-xl px-2 py-1.5">
                     <input
+                      id="invitation-accent-color"
+                      name="accentColor"
+                      aria-label="Highlight Gold Color"
                       type="color"
                       value={accentColor}
                       onChange={(e) => setAccentColor(e.target.value)}

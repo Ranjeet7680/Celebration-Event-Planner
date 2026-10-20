@@ -376,10 +376,12 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
 
           <form onSubmit={handleAddExpense} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="expense-title" className="block text-xs font-semibold text-slate-300 mb-1">
                 Expense Title *
               </label>
               <input
+                id="expense-title"
+                name="title"
                 type="text"
                 required
                 value={title}
@@ -391,10 +393,12 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="expense-amount" className="block text-xs font-semibold text-slate-300 mb-1">
                   Amount ({currency}) *
                 </label>
                 <input
+                  id="expense-amount"
+                  name="amount"
                   type="number"
                   required
                   min="1"
@@ -407,10 +411,12 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="expense-category" className="block text-xs font-semibold text-slate-300 mb-1">
                   Category
                 </label>
                 <select
+                  id="expense-category"
+                  name="category"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
@@ -430,10 +436,12 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="expense-paid-by" className="block text-xs font-semibold text-slate-300 mb-1">
                   Paid By
                 </label>
                 <input
+                  id="expense-paid-by"
+                  name="paidBy"
                   type="text"
                   value={paidBy}
                   onChange={(e) => setPaidBy(e.target.value)}
@@ -442,10 +450,12 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="expense-status" className="block text-xs font-semibold text-slate-300 mb-1">
                   Payment Status
                 </label>
                 <select
+                  id="expense-status"
+                  name="status"
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
                   className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
@@ -457,10 +467,12 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="expense-date" className="block text-xs font-semibold text-slate-300 mb-1">
                 Transaction Date
               </label>
               <input
+                id="expense-date"
+                name="date"
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
@@ -469,10 +481,12 @@ export function BudgetPlannerView({ eventId }: { eventId?: string }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="expense-notes" className="block text-xs font-semibold text-slate-300 mb-1">
                 Notes / Invoice Number
               </label>
               <textarea
+                id="expense-notes"
+                name="notes"
                 rows={2}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}

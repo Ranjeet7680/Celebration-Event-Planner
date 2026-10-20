@@ -212,10 +212,12 @@ export default function TeamPage() {
           >
             <form onSubmit={handleInvite} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="invite-collaborator-name" className="block text-xs font-semibold text-slate-300 mb-1">
                   Name
                 </label>
                 <input
+                  id="invite-collaborator-name"
+                  name="inviteName"
                   type="text"
                   required
                   value={inviteName}
@@ -226,10 +228,12 @@ export default function TeamPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="invite-collaborator-email" className="block text-xs font-semibold text-slate-300 mb-1">
                   Email Address
                 </label>
                 <input
+                  id="invite-collaborator-email"
+                  name="inviteEmail"
                   type="email"
                   required
                   value={inviteEmail}
@@ -240,10 +244,12 @@ export default function TeamPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="invite-collaborator-role" className="block text-xs font-semibold text-slate-300 mb-1">
                   Role Assignment
                 </label>
                 <select
+                  id="invite-collaborator-role"
+                  name="inviteRole"
                   value={inviteRole}
                   onChange={(e) => setInviteRole(e.target.value)}
                   className="w-full bg-[#0B1020] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"
